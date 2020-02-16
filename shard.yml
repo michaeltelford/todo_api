@@ -1,0 +1,13 @@
+name: todo_api
+version: 0.1.0
+
+authors:
+  - Michael Telford <michael.telford@live.com>
+
+targets:
+  todo_api:
+    main: src/todo_api.cr
+
+crystal: 0.33.0
+
+license: MIT
