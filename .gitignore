@@ -3,3 +3,5 @@
 /bin/
 /.shards/
 *.dwarf
+pgdata/
+.DS_Store
