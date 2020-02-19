@@ -3,6 +3,10 @@ services:
   postgres:
     image: postgres:10
     container_name: postgres
+    restart: always
+    volumes:
+      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+      - "./pgdata:/var/lib/postgresql/data"
     ports:
       - "5432:5432"
     environment:
@@ -10,18 +14,16 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=Secret1
       - POSTGRES_DB=app
+  api:
+    image: crystallang/crystal:latest-alpine
+    container_name: api
+    depends_on:
+      - postgres
+    restart: always
     volumes:
-      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
-      - "./pgdata:/var/lib/postgresql/data"
-  # app:
-  #   image: alpine:latest
-  #   container_name: app
-  #   depends_on:
-  #     - postgres
-  #   working_dir: /app
-  #   command: ./todo_api
-  #   ports:
-  #     - "80:3000"
-  #     - "3000:3000"
-  #   volumes:
-  #     - "./bin:/app"
+      - "./:/app"
+    working_dir: /app
+    command: crystal run ./src/todo_api.cr
+    ports:
+      - "80:3000"
+      - "3000:3000"
