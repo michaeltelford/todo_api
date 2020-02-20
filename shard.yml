@@ -11,3 +11,9 @@ targets:
 crystal: 0.33.0
 
 license: MIT
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+  pg:
+    github: will/crystal-pg

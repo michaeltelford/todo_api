@@ -1,6 +1,6 @@
 require "./spec_helper"
 
-describe TodoApi do
+describe TodoAPI do
   # TODO: Write tests
 
   it "works" do
