@@ -1,8 +1,8 @@
 version: '2'
 services:
-  postgres:
+  db:
     image: postgres:10
-    container_name: postgres
+    container_name: db
     restart: always
     volumes:
       - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
@@ -18,7 +18,7 @@ services:
     image: crystallang/crystal:0.33.0-alpine
     container_name: api
     depends_on:
-      - postgres
+      - db
     restart: always
     volumes:
       - "./:/app"
@@ -27,3 +27,5 @@ services:
     ports:
       - "80:3000"
       - "3000:3000"
+    environment:
+      - DB_CONNECTION_STRING=postgres://postgres:Secret1@db:5432/app
