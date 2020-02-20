@@ -15,7 +15,7 @@ services:
       - POSTGRES_PASSWORD=Secret1
       - POSTGRES_DB=app
   api:
-    image: crystallang/crystal:latest-alpine
+    image: crystallang/crystal:0.33.0-alpine
     container_name: api
     depends_on:
       - postgres

@@ -5,7 +5,7 @@ help:
 	@echo "TODO API"
 	@echo "--------"
 	@echo ""
-	@echo "build : Build the production docker image."
+	@echo "build : Build the production alpine docker image."
 	@echo "dev   : Run the app for development using docker-compose."
 	@echo ""
 
@@ -17,4 +17,5 @@ build:
 	--progress --release --static --no-debug
 
 dev:
+	@echo "Run 'guard' to restart the API when src/*.cr files change."
 	docker-compose up
