@@ -1,22 +1,10 @@
-class Model
-  getter db : DB::Database
-
-  def initialize
-    connection_string = ENV["DB_CONNECTION_STRING"]
-    @db = DB.open(connection_string)
-  end
-
-  def finalise
-    close
-  end
+module Model
+  CONNECTION_STRING = ENV["DB_CONNECTION_STRING"]
 
   def exec
-    yield(@db)
-  rescue
-    close
-  end
-
-  def close
-    @db.close rescue nil
+    db = DB.open(CONNECTION_STRING)
+    yield(db)
+  ensure
+    db.close if db rescue nil
   end
 end

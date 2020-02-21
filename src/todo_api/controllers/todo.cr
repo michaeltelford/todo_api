@@ -1,6 +1,7 @@
 # List all todos belonging to the user.
 get "/todo/:user_id" do
-  Todo.new.list 1
+  user_id = "19384673"
+  Todo.get(user_id)
 end
 
 # Update the todos belonging to the user.
