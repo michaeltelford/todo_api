@@ -17,3 +17,7 @@ dependencies:
     github: kemalcr/kemal
   pg:
     github: will/crystal-pg
+
+development_dependencies:
+  debug:
+    github: Sija/debug.cr

@@ -29,3 +29,4 @@ services:
       - "3000:3000"
     environment:
       - DB_CONNECTION_STRING=postgres://postgres:Secret1@db:5432/app
+      - DEBUG=1

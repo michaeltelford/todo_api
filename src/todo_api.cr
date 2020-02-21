@@ -13,6 +13,7 @@ end
 require "db"
 require "pg"
 require "kemal"
+require "debug"
 
 # Require local files.
 require "./todo_api/models/**"
