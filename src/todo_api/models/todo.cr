@@ -21,14 +21,21 @@ class Todo
     )
   end
 
+  def to_json
+    {
+      id: @id,
+      user_id: @user_id,
+      user_name: @user_name,
+      todos: @todos,
+      created_on: @created_on,
+      updated_on: @updated_on
+    }.to_json
+  end
+
   def self.get(user_id : String) : Todo?
-    todo = nil
     sql = "SELECT * FROM todos WHERE user_id = $1 LIMIT 1"
-    exec do |db|
-      db.query_one(sql, user_id) { |rs| todo = new(rs) }
-    end
-    todo
-  rescue _ex : DB::Error
+    exec { |db| db.query_one(sql, user_id) { |rs| new(rs) } }
+  rescue DB::Error
     nil
   end
 end

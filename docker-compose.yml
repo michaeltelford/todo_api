@@ -29,4 +29,5 @@ services:
       - "3000:3000"
     environment:
       - DB_CONNECTION_STRING=postgres://postgres:Secret1@db:5432/app
+      - KEMAL_ENV=development
       - DEBUG=1
