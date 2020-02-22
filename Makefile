@@ -1,4 +1,4 @@
-.PHONY: help build dev
+.PHONY: help build run
 
 help:
 	@echo ""
@@ -6,7 +6,7 @@ help:
 	@echo "--------"
 	@echo ""
 	@echo "build : Build the production alpine docker image."
-	@echo "dev   : Run the app for development using docker-compose."
+	@echo "run   : Run the app for development using docker-compose."
 	@echo ""
 
 build:
@@ -16,6 +16,6 @@ build:
 	crystal build ./src/todo_api.cr -o ./bin/todo_api \
 	--progress --release --static --no-debug
 
-dev:
+run:
 	@echo "Run 'guard' to restart the API when src/*.cr files change."
 	docker-compose up

@@ -1,17 +1,11 @@
-### Filters / Helpers
-
-# Returns 200 and the entity JSON unless nil; otherwise status is returned.
-private def respond(env, entity, or status : Int32)
-  if entity
-    env.response.content_type = "application/json"
-    env.response.status = HTTP::Status::OK
-    env.response.print(entity.to_json)
-  else
-    env.response.status = HTTP::Status.new(status)
-  end
-end
+include Helpers
 
 ### Endpoints
+
+# Creates the DB model if it doesn't already exists.
+post "/migrate" do |env|
+  raise "TODO"
+end
 
 # Get the todos belonging to the user.
 get "/todo/:user_id" do |env|
