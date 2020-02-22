@@ -1,4 +1,4 @@
-CREATE TABLE todos (
+CREATE TABLE IF NOT EXISTS list (
   id serial NOT NULL PRIMARY KEY,
   user_id text NOT NULL UNIQUE,
   user_name text NULL,
@@ -7,7 +7,7 @@ CREATE TABLE todos (
   updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_DATE
 );
 
-INSERT INTO todos (user_id, user_name, todos) VALUES (
+INSERT INTO list (user_id, user_name, todos) VALUES (
   '19384673', 'Michael Telford',
   '[
     { "name": "Wash Dishes", "done": "true" },
@@ -23,7 +23,6 @@ INSERT INTO todos (user_id, user_name, todos) VALUES (
     { "name": "Clean Silverware", "done": "false" },
     { "name": "Fix Clock", "done": "true" },
     { "name": "Learn Rocket Science", "done": "false" },
-    { "name": "Watch Movie", "done": "true" },
-    { "name": "Wash Dog", "done": "true" }
+    { "name": "Watch Movie", "done": "true" }
   ]'
 );

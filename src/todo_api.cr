@@ -16,7 +16,9 @@ require "kemal"
 require "debug"
 
 # Require local files.
+require "./todo_api/models/model"
 require "./todo_api/models/**"
+require "./todo_api/controllers/helpers"
 require "./todo_api/controllers/**"
 
 # Start the HTTP Server.

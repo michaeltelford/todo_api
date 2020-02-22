@@ -1,4 +1,4 @@
-class Todo
+class List
   extend Model
 
   getter id : Int32
@@ -32,8 +32,8 @@ class Todo
     }.to_json
   end
 
-  def self.get(user_id : String) : Todo?
-    sql = "SELECT * FROM todos WHERE user_id = $1 LIMIT 1"
+  def self.get(user_id : String) : List?
+    sql = "SELECT * FROM list WHERE user_id = $1 LIMIT 1"
     exec { |db| db.query_one(sql, user_id) { |rs| new(rs) } }
   rescue DB::Error
     nil

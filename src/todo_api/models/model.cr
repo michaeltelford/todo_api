@@ -2,7 +2,7 @@ module Model
   CONNECTION_STRING = ENV["DB_CONNECTION_STRING"]
   # All SQL should be idempotent e.g. using IF NOT EXISTS etc.
   MIGRATION_SQL = "
-  CREATE TABLE IF NOT EXISTS todos (
+  CREATE TABLE IF NOT EXISTS list (
     id serial NOT NULL PRIMARY KEY,
     user_id text NOT NULL UNIQUE,
     user_name text NULL,

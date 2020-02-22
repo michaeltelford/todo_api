@@ -11,8 +11,8 @@ module Helpers
 
   # Returns 200 with the entity JSON or status (if entity.nil?). Use like:
   # ```
-  # todo = Todo.get(user_id) # todo could be nil but there's no need to check.
-  # respond(env, todo, or: 400)
+  # list = List.get(user_id) # list could be nil but there's no need to check.
+  # respond(env, list, or: 400)
   # ```
   def respond(env, entity, or status : Int32)
     entity ? respond(env, data: entity) : respond(env, status)
