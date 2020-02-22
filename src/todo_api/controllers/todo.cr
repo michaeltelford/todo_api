@@ -4,7 +4,8 @@ include Helpers
 
 # Creates the DB model if it doesn't already exists.
 post "/migrate" do |env|
-  raise "TODO"
+  Todo.migrate
+  respond(env)
 end
 
 # Get the todos belonging to the user.
