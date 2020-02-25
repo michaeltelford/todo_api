@@ -1,21 +1,24 @@
-include Helpers
-
-### Endpoints
-
-# Creates the DB model if it doesn't already exists.
-post "/migrate" do |env|
-  List.migrate
-  respond(env, 200)
-end
-
 # Get the todo list belonging to the user.
 get "/list/:user_id" do |env|
   user_id = env.params.url["user_id"]
   list = List.get(user_id)
-  respond(env, list, or: 400)
+
+  halt env, 400 unless list
+
+  env.response.content_type = "application/json"
+  list.to_json
 end
 
-# Update the todo list belonging to the user.
+# Update the todos belonging to the user.
 put "/list/:user_id" do |env|
-  raise "TODO"
+  user_id = env.params.url["user_id"]
+  payload = env.params.json.as(Hash)
+  halt env, 400 unless payload["list"]? && payload["list"].as(Hash)["todos"]?
+
+  todos = payload["list"].as(Hash)["todos"].as(JSON::Any)
+  list = List.get(user_id)
+  halt env, 400 unless list
+
+  list.todos = todos
+  list.save
 end
