@@ -1,6 +1,4 @@
-class List
-  extend Model
-
+class List < Model
   getter   id         : Int32
   getter   user_id    : String
   getter   user_name  : String?
@@ -8,7 +6,9 @@ class List
   getter   created_on : Time
   getter   updated_on : Time
 
-  def initialize(@id, @user_id, @user_name, @todos, @created_on, @updated_on); end
+  def initialize(@id, @user_id, @user_name, @todos, @created_on, @updated_on)
+    super()
+  end
 
   def initialize(rs : DB::ResultSet)
     initialize(
@@ -38,9 +38,7 @@ class List
 
   def self.get(user_id : String) : List?
     sql = "SELECT * FROM list WHERE user_id = $1 LIMIT 1"
-    exec { |db| db.query_one(sql, user_id) { |rs| new(rs) } }
-  rescue DB::Error
-    nil
+    exec { |db| db.query_one(sql, user_id) { |rs| new(rs) } } rescue nil
   end
 
   def to_json
@@ -55,10 +53,7 @@ class List
   end
 
   def save
-    sql = "
-    INSERT INTO list(user_id, user_name, todos, updated_on)
-    VALUES ($1, $2, $3, $4);
-    "
-    # exec { |db| db.exec(sql, @user_id, @user_name, @todos, @updated_on) }
+    sql = "UPDATE list SET todos = $1, updated_on = $2 WHERE id = $3;"
+    exec { |db| db.exec(sql, @todos.to_json, Time.local, @id) }
   end
 end

@@ -2,7 +2,6 @@
 get "/list/:user_id" do |env|
   user_id = env.params.url["user_id"]
   list = List.get(user_id)
-
   halt env, 400 unless list
 
   env.response.content_type = "application/json"
