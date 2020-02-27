@@ -1,3 +1,7 @@
+before_all do |env|
+  env.response.headers["Access-Control-Allow-Origin"] = "*"
+end
+
 # Get the todo list belonging to the user.
 get "/list/:user_id" do |env|
   user_id = env.params.url["user_id"]
