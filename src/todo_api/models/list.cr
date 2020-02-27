@@ -33,12 +33,17 @@ class List < Model
       updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_DATE
     );
     "
-    exec { |db| db.exec(sql) }
+    open { |db| db.exec(sql) }
   end
 
   def self.get(user_id : String) : List?
     sql = "SELECT * FROM list WHERE user_id = $1 LIMIT 1"
-    exec { |db| db.query_one(sql, user_id) { |rs| new(rs) } } rescue nil
+    open { |db| db.query_one(sql, user_id) { |rs| new(rs) } } rescue nil
+  end
+
+  def save
+    sql = "UPDATE list SET todos = $1, updated_on = $2 WHERE id = $3;"
+    open { |db| db.exec(sql, @todos.to_json, Time.local, @id) }
   end
 
   def to_json
@@ -50,10 +55,5 @@ class List < Model
       created_on: @created_on,
       updated_on: @updated_on
     }.to_json
-  end
-
-  def save
-    sql = "UPDATE list SET todos = $1, updated_on = $2 WHERE id = $3;"
-    exec { |db| db.exec(sql, @todos.to_json, Time.local, @id) }
   end
 end
