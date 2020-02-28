@@ -48,12 +48,14 @@ class List < Model
 
   def to_json
     {
-      id: @id,
-      user_id: @user_id,
-      user_name: @user_name,
-      todos: @todos,
-      created_on: @created_on,
-      updated_on: @updated_on
+      list: {
+        id: @id,
+        user_id: @user_id,
+        user_name: @user_name,
+        todos: @todos,
+        created_on: @created_on,
+        updated_on: @updated_on
+      }
     }.to_json
   end
 end
