@@ -1,3 +1,14 @@
+# Allow any CORS request.
+before_all do |env|
+  env.response.headers.add("Access-Control-Allow-Origin", "*")
+end
+
+# CORS pre-flight requests.
+options "/*" do |env|
+  env.response.headers.add("Access-Control-Allow-Method", "*")
+  env.response.headers.add("Access-Control-Allow-Headers", "*")
+end
+
 # Healthcheck.
 get "/healthcheck" {}
 
