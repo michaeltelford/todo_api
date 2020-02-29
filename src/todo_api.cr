@@ -4,7 +4,7 @@ module TodoAPI
 end
 
 # Assert the required ENV vars.
-required_env = %w[DB_CONNECTION_STRING]
+required_env = %w[PORT DB_CONNECTION_STRING]
 unless required_env.all? { |var| ENV[var]? }
   raise "ENV must include: #{required_env}"
 end
@@ -21,4 +21,7 @@ require "./todo_api/models/**"
 require "./todo_api/controllers/**"
 
 # Start the HTTP Server.
-Kemal.run
+Kemal.run do |config|
+  server = config.server.not_nil!
+  server.bind_tcp("0.0.0.0", ENV["PORT"].to_i)
+end

@@ -25,9 +25,10 @@ services:
     working_dir: /app
     command: crystal run ./src/todo_api.cr
     ports:
-      - "80:3000"
-      - "3000:3000"
+      - "80:8080"
+      - "8080:8080"
     environment:
+      - PORT=8080
       - DB_CONNECTION_STRING=postgres://postgres:Secret1@db:5432/app
       - KEMAL_ENV=development
       - DEBUG=1
