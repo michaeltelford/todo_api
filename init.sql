@@ -10,6 +10,10 @@ CREATE TABLE IF NOT EXISTS list (
 INSERT INTO list (user_id, user_name, todos) VALUES (
   '101', 'Guest',
   '[
-    { "name": "Add Some TODOs", "done": false }
+    { "name": "Wash Car", "done": false },
+    { "name": "Play Records", "done": true },
+    { "name": "Watch The Bikes", "done": false },
+    { "name": "Write Code", "done": true },
+    { "name": "Netflix And Chill", "done": false }
   ]'
 );

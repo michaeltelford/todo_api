@@ -21,3 +21,5 @@ dependencies:
 development_dependencies:
   debug:
     github: Sija/debug.cr
+  spec-kemal:
+    github: michaeltelford/spec-kemal

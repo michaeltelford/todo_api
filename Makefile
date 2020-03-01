@@ -1,4 +1,4 @@
-.PHONY: help build run
+.PHONY: help build run test
 
 help:
 	@echo ""
@@ -7,6 +7,7 @@ help:
 	@echo ""
 	@echo "build : Build the production alpine docker image."
 	@echo "run   : Run the app for development using docker-compose."
+	@echo "test  : Run the tests."
 	@echo ""
 
 build:
@@ -18,4 +19,9 @@ build:
 
 run:
 	@echo "Run 'guard' to restart the API when src/*.cr files change."
-	docker-compose up
+	KEMAL_ENV=development POSTGRES_DB=app docker-compose up
+
+test:
+	@-docker rm -f db 2>/dev/null || true
+	KEMAL_ENV=test POSTGRES_DB=test docker-compose run api crystal spec
+	@-docker stop db 2>/dev/null || true
