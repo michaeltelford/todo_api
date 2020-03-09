@@ -13,6 +13,7 @@ end
 require "db"
 require "pg"
 require "kemal"
+require "kemal-session"
 require "debug"
 
 # Require local files.

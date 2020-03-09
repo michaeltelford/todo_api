@@ -15,6 +15,8 @@ license: MIT
 dependencies:
   kemal:
     github: kemalcr/kemal
+  kemal-session:
+    github: michaeltelford/kemal-session
   pg:
     github: will/crystal-pg
 

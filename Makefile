@@ -22,6 +22,7 @@ run:
 	KEMAL_ENV=development POSTGRES_DB=app docker-compose up
 
 test:
-	@-docker rm -f db 2>/dev/null || true
-	KEMAL_ENV=test POSTGRES_DB=test docker-compose run api crystal spec
-	@-docker stop db 2>/dev/null || true
+	@echo "Clearing db containers before and after the tests."
+	docker rm -f db 2>/dev/null || true
+	KEMAL_ENV=test POSTGRES_DB=test docker-compose run --rm api crystal spec || true
+	docker rm -f db
