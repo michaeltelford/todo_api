@@ -1,6 +1,7 @@
-# Allow any CORS request.
+# Allow any CORS request and default the content type.
 before_all do |env|
   env.response.headers.add("Access-Control-Allow-Origin", "*")
+  env.response.content_type = "application/json"
 end
 
 # CORS pre-flight requests.

@@ -5,3 +5,6 @@
 *.dwarf
 pgdata/
 .DS_Store
+.env
+**/spike.cr
+todo_api
