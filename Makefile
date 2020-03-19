@@ -12,7 +12,7 @@ help:
 	@echo ""
 
 env:
-	echo 'TOKEN_EXCHANGE_URL=""\nCLIENT_ID=""\nCLIENT_SECRET=""\nREDIRECT_URI=""\n' > .env
+	echo 'TOKEN_EXCHANGE_URL=\nCLIENT_ID=\nCLIENT_SECRET=\nREDIRECT_URI=' > .env
 
 build:
 	@-mkdir bin 2>/dev/null || true
