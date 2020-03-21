@@ -43,7 +43,7 @@ private def exchange_code(authCode : String) : String
     "client_id" => ENV["CLIENT_ID"],
     "client_secret" => ENV["CLIENT_SECRET"],
     "code" => authCode,
-    "redirect_uri" => ENV["REDIRECT_URI"]
+    "redirect_uri" => ENV["CLIENT_AUTH_URI"]
   }
 
   HTTP::Client.post(url, headers, form: payload) do |response|

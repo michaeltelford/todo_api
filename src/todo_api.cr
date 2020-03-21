@@ -1,18 +1,33 @@
 # Server API providing CRUD operations on the TODO data model.
 module TodoAPI
   VERSION = "0.1.0"
+
+  REQUIRED_ENV_VARS = %w[
+    PORT DB_CONNECTION_STRING SESSIONS_SECRET SECURE_SESSIONS
+    TOKEN_EXCHANGE_URL CLIENT_ID CLIENT_SECRET CLIENT_AUTH_URI
+  ]
+
+  # Assert the required ENV vars are present.
+  def self.assert_env_vars
+    unless REQUIRED_ENV_VARS.all? { |var| ENV[var]? }
+      raise "ENV must include: #{REQUIRED_ENV_VARS}"
+    end
+  end
+
+  # Set the client origin URI (for CORS headers) in ENV.
+  def self.set_env_client_uri
+    auth_uri = URI.parse(ENV["CLIENT_AUTH_URI"])
+    raise "Invalid CLIENT_AUTH_URI" unless auth_uri.absolute?
+
+    client_uri = "#{auth_uri.scheme}://#{auth_uri.host}"
+    client_uri += ":#{auth_uri.port}" if auth_uri.port
+
+    ENV["CLIENT_URI"] = client_uri
+  end
 end
 
-# Assert the required ENV vars.
-required_env = %w[
-  PORT DB_CONNECTION_STRING SESSIONS_SECRET SECURE_SESSIONS
-  TOKEN_EXCHANGE_URL CLIENT_ID CLIENT_SECRET REDIRECT_URI
-]
-unless required_env.all? { |var| ENV[var]? }
-  raise "ENV must include: #{required_env}"
-end
-
-# Require shards/libs.
+# Require standard libs / shards.
+require "uri"
 require "http"
 require "db"
 require "pg"
@@ -21,7 +36,11 @@ require "kemal-session"
 require "jwt"
 require "debug"
 
-# Require local files.
+# Pre-requisites for loading code...
+TodoAPI.assert_env_vars
+TodoAPI.set_env_client_uri
+
+# Require local code files.
 require "./todo_api/models/model"
 require "./todo_api/models/**"
 require "./todo_api/controllers/**"
