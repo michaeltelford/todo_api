@@ -1,7 +1,6 @@
 # Check if an auth'd session exists for the client and return it.
 get "/session" do |env|
-  logged_in = env.session.bool?("logged_in")
-  halt env, 401 unless logged_in
+  halt env, 401 unless authorized?(env)
 
   get_user_session(env).to_json
 end
@@ -59,7 +58,7 @@ private def exchange_code(authCode : String) : String
 end
 
 private def get_user_session(env) : NamedTuple(name: String, email: String) | Nil
-  return nil unless env.session.bool?("logged_in")
+  return nil unless authorized?(env)
 
   name = env.session.string("name")
   email = env.session.string("email")

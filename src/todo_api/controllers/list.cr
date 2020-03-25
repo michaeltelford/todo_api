@@ -1,4 +1,4 @@
-# Get the todo list belonging to the user.
+# Get the user's todo lists.
 get "/list/:user_id" do |env|
   halt env, 401 unless authorized?(env)
 
@@ -9,7 +9,15 @@ get "/list/:user_id" do |env|
   list.to_json
 end
 
-# Update the todos belonging to the user.
+# Get the todo list by ID, providing it belongs to the user.
+get "/list/:id" do |env|
+end
+
+# Create a todo list belonging to the user.
+post "/list" do |env|
+end
+
+# Update the todo list by ID, providing it belongs to the user.
 put "/list/:user_id" do |env|
   halt env, 401 unless authorized?(env)
 
@@ -25,8 +33,6 @@ put "/list/:user_id" do |env|
   list.save
 end
 
-# Helper method used in any endpoints requiring auth.
-# Note, before_all has a bug and doesn't filter the path.
-private def authorized?(env)
-  env.session.bool?("logged_in")
+# Delete the todo list by ID, providing it belongs to the user.
+delete "/list/:id" do |env|
 end

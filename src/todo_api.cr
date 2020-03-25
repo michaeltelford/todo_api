@@ -43,6 +43,7 @@ TodoAPI.set_env_client_uri
 # Require local code files.
 require "./todo_api/models/model"
 require "./todo_api/models/**"
+require "./todo_api/controllers/helpers"
 require "./todo_api/controllers/**"
 
 # Init client session config.
