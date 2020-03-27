@@ -7,6 +7,16 @@ class List < Model
   getter   created_on : Time
   getter   updated_on : Time
 
+  JSON.mapping(
+    id:         Int32,
+    user_id:    String,
+    user_name:  String?,
+    name:       String,
+    todos:      JSON::Any,
+    created_on: Time,
+    updated_on: Time,
+  )
+
   def initialize(@id, @user_id, @user_name, @name, @todos, @created_on, @updated_on)
     super()
   end
@@ -61,27 +71,13 @@ class List < Model
     lists
   end
 
-  def save
-    @id > 0 ? update : create
-  end
-
   def delete
     sql = "DELETE FROM list WHERE id = $1;"
     open { |db| db.exec(sql, @id) }
   end
 
-  def to_json
-    {
-      list: {
-        id: @id,
-        user_id: @user_id,
-        user_name: @user_name,
-        name: @name,
-        todos: @todos,
-        created_on: @created_on,
-        updated_on: @updated_on
-      }
-    }.to_json
+  def save
+    @id > 0 ? update : create
   end
 
   private def create
