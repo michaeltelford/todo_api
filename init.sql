@@ -22,7 +22,8 @@ INSERT INTO list (user_id, user_name, name, todos) VALUES (
   '[
     { "name": "Push Ups", "done": false },
     { "name": "Plank", "done": true },
-    { "name": "Pull Ups", "done": false }
+    { "name": "Pull Ups", "done": false },
+    { "name": "Sit Ups", "done": true }
   ]'
 ), (
   'michael@yahoo.com', 'Michael', 'Dev',

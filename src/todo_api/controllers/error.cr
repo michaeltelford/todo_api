@@ -1,5 +1,7 @@
-error 404 do
-  { "error": "Not found" }.to_json
+# 404 is for when a resource doesn't exist, a missing route is a 500.
+error 404 do |env|
+  json = { "error": "Not found" }.to_json
+  halt env, status_code: 500, response: json
 end
 
 error 500 do

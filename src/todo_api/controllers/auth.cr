@@ -8,7 +8,7 @@ end
 # Authenticate and start a new session for the client.
 post "/session" do |env|
   payload = env.params.json.as(Hash)
-  halt env, 400 unless payload["authorizationCode"]?
+  halt env, 401 unless payload["authorizationCode"]?
 
   authCode = payload["authorizationCode"].as(String)
   id_token = exchange_code(authCode) rescue halt env, 401

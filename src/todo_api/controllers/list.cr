@@ -3,8 +3,9 @@ get "/list/:user_id" do |env|
   halt env, 401 unless authorized?(env)
 
   user_id = env.params.url["user_id"]
-  lists = List.list(user_id)
+  halt env, 401 unless env.session.string("email") == user_id
 
+  lists = List.list(user_id)
   lists.to_json
 end
 
@@ -14,7 +15,9 @@ get "/list/:id" do |env|
 
   list_id = env.params.url["id"]
   list = List.get(list_id)
-  halt env, 400 unless list
+
+  halt env, 404 unless list
+  halt env, 401 unless env.session.string("email") == list.user_id
 
   list.to_json
 end
@@ -54,7 +57,8 @@ put "/list/:id" do |env|
   todos = json["todos"].as(JSON::Any)
 
   list = List.get(list_id)
-  halt env, 400 unless list
+  halt env, 404 unless list
+  halt env, 401 unless env.session.string("email") == list.user_id
 
   list.name  = name
   list.todos = todos
@@ -68,7 +72,9 @@ delete "/list/:id" do |env|
 
   list_id = env.params.url["id"]
   list = List.get(list_id)
-  halt env, 400 unless list
+
+  halt env, 404 unless list
+  halt env, 401 unless env.session.string("email") == list.user_id
 
   list.delete
 end
