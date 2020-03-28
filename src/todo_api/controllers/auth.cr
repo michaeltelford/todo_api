@@ -44,8 +44,8 @@ def allow_access?(env, list : List) : Bool
   env.session.string("email") == list.user_email
 end
 
-private def get_user_session(env) : NamedTuple(name: String, email: String) | Nil
-  return nil unless authorized?(env)
+def get_user_session(env) : NamedTuple(name: String, email: String)
+  raise "Not logged in" unless env.session.bool?("logged_in")
 
   name = env.session.string("name")
   email = env.session.string("email")
