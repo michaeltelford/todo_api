@@ -59,14 +59,16 @@ class List < Model
 
   def self.get(id : String) : List?
     sql = "SELECT * FROM list WHERE id = $1 LIMIT 1;"
-    open { |db| db.query_one(sql, id) { |rs| new(rs) } } rescue nil
+    open { |db| db.query_one(sql, id) { |rs| new(rs) } }
   end
 
   def self.list(user_id : String) : Array(List)
     lists = Array(List).new
 
-    sql = "SELECT * FROM list WHERE user_id = $1 LIMIT 1;"
-    open { |db| db.query(sql, user_id) { |rs| lists << new(rs) } } rescue nil
+    sql = "SELECT * FROM list WHERE user_id = $1;"
+    open do |db|
+      db.query(sql, user_id) { |rs| rs.each { lists << new(rs) } }
+    end
 
     lists
   end

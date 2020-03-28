@@ -1,11 +1,9 @@
 # Get the user's todo lists.
-get "/list/:user_id" do |env|
+get "/lists" do |env|
   halt env, 401 unless authorized?(env)
+  email = env.session.string("email")
 
-  user_id = env.params.url["user_id"]
-  halt env, 401 unless env.session.string("email") == user_id
-
-  lists = List.list(user_id)
+  lists = List.list(email)
   lists.to_json
 end
 
@@ -17,7 +15,7 @@ get "/list/:id" do |env|
   list = List.get(list_id)
 
   halt env, 404 unless list
-  halt env, 401 unless env.session.string("email") == list.user_id
+  halt env, 401 unless allow_access?(env, list)
 
   list.to_json
 end
@@ -58,7 +56,7 @@ put "/list/:id" do |env|
 
   list = List.get(list_id)
   halt env, 404 unless list
-  halt env, 401 unless env.session.string("email") == list.user_id
+  halt env, 401 unless allow_access?(env, list)
 
   list.name  = name
   list.todos = todos
@@ -74,7 +72,9 @@ delete "/list/:id" do |env|
   list = List.get(list_id)
 
   halt env, 404 unless list
-  halt env, 401 unless env.session.string("email") == list.user_id
+  halt env, 401 unless allow_access?(env, list)
 
   list.delete
+
+  halt env, 204
 end

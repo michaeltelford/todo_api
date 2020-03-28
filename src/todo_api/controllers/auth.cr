@@ -30,6 +30,37 @@ delete "/session" do |env|
   200
 end
 
+# Helper method used in any endpoints requiring auth.
+# Note, before_all has a bug and doesn't filter the path.
+def authorized?(env) : Bool
+  env.session.bool?("logged_in") ? true : false
+end
+
+# Helper method used in any endpoints requiring auth.
+# Returns true if the user has access to the given list.
+def allow_access?(env, list : List) : Bool
+  return false unless env.session.string?("email")
+
+  env.session.string("email") == list.user_id
+end
+
+private def get_user_session(env) : NamedTuple(name: String, email: String) | Nil
+  return nil unless authorized?(env)
+
+  name = env.session.string("name")
+  email = env.session.string("email")
+
+  { name: name, email: email }
+end
+
+private def set_user_session(env, name : String, email : String) : Nil
+  env.session.bool("logged_in", true)
+  env.session.string("name", name)
+  env.session.string("email", email)
+
+  nil
+end
+
 # Exchange an auth0 authorization code for a JWT ID token.
 private def exchange_code(authCode : String) : String
   url = ENV["TOKEN_EXCHANGE_URL"]
@@ -55,21 +86,4 @@ private def exchange_code(authCode : String) : String
     json = Hash(String, String | Int32).from_json(body)
     return json["id_token"].as(String)
   end
-end
-
-private def get_user_session(env) : NamedTuple(name: String, email: String) | Nil
-  return nil unless authorized?(env)
-
-  name = env.session.string("name")
-  email = env.session.string("email")
-
-  { name: name, email: email }
-end
-
-private def set_user_session(env, name : String, email : String) : Nil
-  env.session.bool("logged_in", true)
-  env.session.string("name", name)
-  env.session.string("email", email)
-
-  nil
 end
