@@ -41,7 +41,7 @@ end
 def allow_access?(env, list : List) : Bool
   return false unless env.session.string?("email")
 
-  env.session.string("email") == list.user_id
+  env.session.string("email") == list.user_email
 end
 
 private def get_user_session(env) : NamedTuple(name: String, email: String) | Nil

@@ -1,6 +1,6 @@
 class List < Model
   getter   id         : Int32
-  getter   user_id    : String
+  getter   user_email : String
   getter   user_name  : String?
   property name       : String
   property todos      : JSON::Any
@@ -9,7 +9,7 @@ class List < Model
 
   JSON.mapping(
     id:         Int32,
-    user_id:    String,
+    user_email: String,
     user_name:  String?,
     name:       String,
     todos:      JSON::Any,
@@ -17,11 +17,11 @@ class List < Model
     updated_on: Time,
   )
 
-  def initialize(@id, @user_id, @user_name, @name, @todos, @created_on, @updated_on)
+  def initialize(@id, @user_email, @user_name, @name, @todos, @created_on, @updated_on)
     super()
   end
 
-  def initialize(@user_id, @user_name, @name, @todos)
+  def initialize(@user_email, @user_name, @name, @todos)
     @id = 0
     @created_on = Time.local
     @updated_on = Time.local
@@ -46,7 +46,7 @@ class List < Model
     sql = "
     CREATE TABLE IF NOT EXISTS list (
       id SERIAL NOT NULL PRIMARY KEY,
-      user_id TEXT NOT NULL,
+      user_email TEXT NOT NULL,
       user_name TEXT NULL,
       name TEXT NOT NULL,
       todos JSON NOT NULL,
@@ -62,12 +62,12 @@ class List < Model
     open { |db| db.query_one(sql, id) { |rs| new(rs) } }
   end
 
-  def self.list(user_id : String) : Array(List)
+  def self.list(user_email : String) : Array(List)
     lists = Array(List).new
 
-    sql = "SELECT * FROM list WHERE user_id = $1;"
+    sql = "SELECT * FROM list WHERE user_email = $1;"
     open do |db|
-      db.query(sql, user_id) { |rs| rs.each { lists << new(rs) } }
+      db.query(sql, user_email) { |rs| rs.each { lists << new(rs) } }
     end
 
     lists
@@ -83,8 +83,8 @@ class List < Model
   end
 
   private def create
-    sql = "INSERT INTO list(user_id, user_name, name, todos) VALUES ($1, $2, $3, $4);"
-    open { |db| db.exec(sql, @user_id, @user_name, @name, @todos.to_json) }
+    sql = "INSERT INTO list(user_email, user_name, name, todos) VALUES ($1, $2, $3, $4);"
+    open { |db| db.exec(sql, @user_email, @user_name, @name, @todos.to_json) }
   end
 
   private def update

@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS list (
   id SERIAL NOT NULL PRIMARY KEY,
-  user_id TEXT NOT NULL,
+  user_email TEXT NOT NULL,
   user_name TEXT NULL,
   name TEXT NOT NULL,
   todos JSON NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS list (
   updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_DATE
 );
 
-INSERT INTO list (user_id, user_name, name, todos) VALUES (
+INSERT INTO list (user_email, user_name, name, todos) VALUES (
   'michael@yahoo.com', 'Michael', 'Daily',
   '[
     { "name": "Wash Car", "done": false },
