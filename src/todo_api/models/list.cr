@@ -1,4 +1,6 @@
 class List < Model
+  MAX_LISTS_PER_USER = 5
+
   getter   id         : Int32
   getter   user_email : String
   getter   user_name  : String?
@@ -83,6 +85,10 @@ class List < Model
   end
 
   private def create
+    sql = "SELECT COUNT(id) FROM list WHERE user_email = $1;"
+    num_lists = open { |db| db.scalar(sql, @user_email).as(Int64) }
+    raise "Max lists achieved" if num_lists >= MAX_LISTS_PER_USER
+
     sql = "INSERT INTO list(user_email, user_name, name, todos) VALUES ($1, $2, $3, $4);"
     open { |db| db.exec(sql, @user_email, @user_name, @name, @todos.to_json) }
   end
