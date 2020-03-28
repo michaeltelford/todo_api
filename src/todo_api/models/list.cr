@@ -48,7 +48,7 @@ class List < Model
       id SERIAL NOT NULL PRIMARY KEY,
       user_email TEXT NOT NULL,
       user_name TEXT NULL,
-      name TEXT NOT NULL,
+      name TEXT NOT NULL UNIQUE,
       todos JSON NOT NULL,
       created_on TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
       updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_DATE
