@@ -61,7 +61,7 @@ class List < Model
 
   def self.get(id : String) : List?
     sql = "SELECT * FROM list WHERE id = $1 LIMIT 1;"
-    open { |db| db.query_one(sql, id) { |rs| new(rs) } }
+    open { |db| db.query_one(sql, id) { |rs| new(rs) } } rescue nil
   end
 
   def self.list(user_email : String) : Array(List)

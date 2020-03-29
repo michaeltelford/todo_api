@@ -2,7 +2,7 @@
 get "/session" do |env|
   halt env, 401 unless authorized?(env)
 
-  get_user_session(env).to_json
+  { session: get_user_session(env) }.to_json
 end
 
 # Authenticate and start a new session for the client.
@@ -20,14 +20,15 @@ post "/session" do |env|
   end
 
   set_user_session(env, payload["name"].as_s, payload["email"].as_s)
-  get_user_session(env).to_json
+
+  { session: get_user_session(env) }.to_json
 end
 
 # Delete the user session for the client.
 delete "/session" do |env|
   env.session.destroy
 
-  200
+  halt env, 204
 end
 
 # Helper method used in any endpoints requiring auth.
