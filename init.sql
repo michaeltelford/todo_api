@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS list (
 );
 
 INSERT INTO list (user_email, user_name, name, todos) VALUES (
-  'michael@yahoo.com', 'Michael', 'Daily',
+  'michael.telford@live.com', 'Michael Telford', 'Daily',
   '[
     { "name": "Wash Car", "done": false },
     { "name": "Play Records", "done": true },
@@ -26,7 +26,7 @@ INSERT INTO list (user_email, user_name, name, todos) VALUES (
     { "name": "Sit Ups", "done": true }
   ]'
 ), (
-  'michael@yahoo.com', 'Michael', 'Dev',
+  'michael.telford@live.com', 'Michael Telford', 'Dev',
   '[
     { "name": "Write Tests", "done": true },
     { "name": "Auth", "done": false },
