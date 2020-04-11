@@ -2,11 +2,11 @@ version: 1.0
 shards:
   bindata:
     github: spider-gazelle/bindata
-    version: 1.2.0
+    version: 1.2.2
 
   db:
     github: crystal-lang/crystal-db
-    version: 0.8.0
+    version: 0.9.0
 
   debug:
     github: Sija/debug.cr
@@ -38,7 +38,7 @@ shards:
 
   pg:
     github: will/crystal-pg
-    version: 0.20.0
+    version: 0.21.0
 
   radix:
     github: luislavena/radix
