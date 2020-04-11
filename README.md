@@ -12,6 +12,19 @@ A HTTP server was needed to build a working API and data model for the TODO fron
 - It's blindingly fast! Sub 10ms response times (having pulled data from the DB) are an average, while running on a docker network.
 - It compiles down into a native binary which makes for small Docker images, capable of being deployed anywhere.
 
+## ENV
+
+The following environment variables are required to run the server:
+
+- PORT
+- DB_CONNECTION_STRING
+- SESSIONS_SECRET
+- SECURE_SESSIONS
+- TOKEN_EXCHANGE_URL
+- CLIENT_ID
+- CLIENT_SECRET
+- CLIENT_AUTH_URI
+
 ## Usage
 
 At the root of the repo, you can run the following commands:
