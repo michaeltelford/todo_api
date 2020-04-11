@@ -33,9 +33,9 @@ require "http"
 require "db"
 require "pg"
 require "jwt"
-require "debug"
 require "kemal"
 require "kemal-session"
+# require "debug"
 
 # Pre-requisites for loading code...
 TodoAPI.assert_env_vars
