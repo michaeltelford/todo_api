@@ -2,7 +2,7 @@ require "spec"
 require "spec-kemal"
 require "../src/todo_api"
 
-CONNECTION_STRING = ENV["DB_CONNECTION_STRING"]
+CONNECTION_STRING = ENV["DATABASE_URL"]
 
 def open
   db = DB.open(CONNECTION_STRING)

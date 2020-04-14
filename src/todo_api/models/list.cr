@@ -43,22 +43,6 @@ class List < Model
     )
   end
 
-  # All SQL should be idempotent e.g. using IF NOT EXISTS etc.
-  def self.migrate
-    sql = "
-    CREATE TABLE IF NOT EXISTS list (
-      id SERIAL NOT NULL PRIMARY KEY,
-      user_email TEXT NOT NULL,
-      user_name TEXT NULL,
-      name TEXT NOT NULL UNIQUE,
-      todos JSON NOT NULL,
-      created_on TIMESTAMP NOT NULL DEFAULT CURRENT_DATE,
-      updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_DATE
-    );
-    "
-    open { |db| db.exec(sql) }
-  end
-
   def self.get(id : String) : List?
     sql = "SELECT * FROM list WHERE id = $1 LIMIT 1;"
     open { |db| db.query_one(sql, id) { |rs| new(rs) } } rescue nil

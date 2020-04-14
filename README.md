@@ -17,7 +17,7 @@ A HTTP server was needed to build a working API and data model for the TODO fron
 The following environment variables are required to run the server:
 
 - PORT
-- DB_CONNECTION_STRING
+- DATABASE_URL
 - SESSIONS_SECRET
 - SECURE_SESSIONS
 - TOKEN_EXCHANGE_URL

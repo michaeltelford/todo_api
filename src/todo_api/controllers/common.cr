@@ -17,6 +17,3 @@ end
 
 # Healthcheck.
 get "/healthcheck" {}
-
-# Creates the DB model if it doesn't already exist.
-post "/migrate" { List.migrate }

@@ -20,10 +20,4 @@ describe TodoAPI do
     )
     response.headers["Access-Control-Max-Age"]?.should eq "86400"
   end
-
-  it "returns 200 for POST /migrate" do
-    post "/migrate"
-
-    response.status_code.should eq 200
-  end
 end

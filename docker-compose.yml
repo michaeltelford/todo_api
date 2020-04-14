@@ -7,8 +7,8 @@ services:
     volumes:
       - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
       # - "./pgdata:/var/lib/postgresql/data"
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
     environment:
       - TZ=Europe/Belfast
       - POSTGRES_USER=postgres
@@ -25,14 +25,13 @@ services:
     working_dir: /app
     command: crystal run ./src/todo_api.cr
     ports:
-      - "80:8080"
       - "8080:8080"
     env_file:
       - .env
     environment:
       - PORT=8080
       - POSTGRES_DB # Taken from the shell when started.
-      - DB_CONNECTION_STRING=postgres://postgres:Secret1@db:5432/${POSTGRES_DB}
+      - DATABASE_URL=postgres://postgres:Secret1@db:5432/${POSTGRES_DB}
       - DEBUG=1
       - KEMAL_ENV # Taken from the shell when started.
       - SESSIONS_SECRET=732b312b8ff202a605ed554ba93d23c229512aa44faac0b5be6ac692f5e65deb6b4f628cb15253028f7d6d6212aca6033d4cad8ca5cbbd7999ad591336750a72
