@@ -12,7 +12,7 @@ help:
 	@echo ""
 
 env:
-	echo 'TOKEN_EXCHANGE_URL=\nCLIENT_ID=\nCLIENT_SECRET=\nCLIENT_AUTH_URI=' > .env
+	echo 'CLIENT_AUTH_URI=\nCLIENT_ID=\nCLIENT_SECRET=\nRSA_PUBLIC_KEY=\nTOKEN_EXCHANGE_URL=' > .env
 
 build:
 	@-mkdir bin 2>/dev/null || true

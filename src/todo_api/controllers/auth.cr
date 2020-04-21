@@ -1,65 +1,59 @@
-# Check if an auth'd session exists for the client and return it.
-get "/session" do |env|
-  halt env, 401 unless authorized?(env)
-
-  { session: get_user_session(env) }.to_json
-end
-
-# Authenticate and start a new session for the client.
+# Exchange the auth code for a JWT token, used in subsequent requests.
 post "/session" do |env|
   payload = env.params.json.as(Hash)
-  halt env, 401 unless payload["authorizationCode"]?
 
   authCode = payload["authorizationCode"].as(String)
-  id_token = exchange_code(authCode) rescue halt env, 401
+  id_token = exchange_code(authCode)
+  payload  = decode_token(id_token)
 
-  payload, _ = JWT.decode(id_token, verify: false, validate: false)
-  if payload["aud"].as_s != ENV["CLIENT_ID"]
-    puts "payload[aud] didn't match ENV[CLIENT_ID]"
-    halt env, 401
-  end
-
-  set_user_session(env, payload["name"].as_s, payload["email"].as_s)
-
-  { session: get_user_session(env) }.to_json
+  {
+    session: {
+      token:   id_token,
+      name:    payload["name"].as_s,
+      email:   payload["email"].as_s,
+      picture: payload["picture"].as_s,
+    },
+  }.to_json
+rescue
+  halt env, 401
 end
 
-# Delete the user session for the client.
-delete "/session" do |env|
-  env.session.destroy
-
-  halt env, 204
-end
-
-# Helper method used in any endpoints requiring auth.
+# Helper method used in any endpoints requiring auth. Sets the authorised
+# user's name and email if successful.
 # Note, before_all has a bug and doesn't filter the path.
 def authorized?(env) : Bool
-  env.session.bool?("logged_in") ? true : false
+  auth     = env.request.headers["Authorization"]
+  id_token = auth.split("Bearer ").last
+  payload  = decode_token(id_token)
+
+  set_current_user(env, payload)
+  true
+rescue
+  false
 end
 
 # Helper method used in any endpoints requiring auth.
 # Returns true if the user has access to the given list.
 def allow_access?(env, list : List) : Bool
-  return false unless env.session.string?("email")
+  return false unless env.get?("current_user_email")
 
-  env.session.string("email") == list.user_email
+  env.get("current_user_email") == list.user_email
 end
 
-def get_user_session(env) : NamedTuple(name: String, email: String)
-  raise "Not logged in" unless env.session.bool?("logged_in")
-
-  name = env.session.string("name")
-  email = env.session.string("email")
-
-  { name: name, email: email }
+# Returns the authorised user's username and email.
+def get_current_user(env) : NamedTuple
+  {
+    email:   env.get("current_user_email").as(String),
+    name:    env.get("current_user_name").as(String),
+    picture: env.get("current_user_picture").as(String),
+  }
 end
 
-private def set_user_session(env, name : String, email : String) : Nil
-  env.session.bool("logged_in", true)
-  env.session.string("name", name)
-  env.session.string("email", email)
-
-  nil
+# Set the current user in the env from an JWT payload.
+private def set_current_user(env, payload)
+  env.set("current_user_email",   payload["email"].as_s)
+  env.set("current_user_name",    payload["name"].as_s)
+  env.set("current_user_picture", payload["picture"].as_s) if payload["picture"]?
 end
 
 # Exchange an auth0 authorization code for a JWT ID token.
@@ -67,14 +61,14 @@ private def exchange_code(authCode : String) : String
   url = ENV["TOKEN_EXCHANGE_URL"]
   headers = HTTP::Headers{
     "Content-Type" => "application/x-www-form-urlencoded",
-    "Accept" => "application/json"
+    "Accept"       => "application/json"
   }
   payload = {
-    "grant_type" => "authorization_code",
-    "client_id" => ENV["CLIENT_ID"],
+    "grant_type"    => "authorization_code",
+    "client_id"     => ENV["CLIENT_ID"],
     "client_secret" => ENV["CLIENT_SECRET"],
-    "code" => authCode,
-    "redirect_uri" => ENV["CLIENT_AUTH_URI"]
+    "code"          => authCode,
+    "redirect_uri"  => ENV["CLIENT_AUTH_URI"]
   }
 
   HTTP::Client.post(url, headers, form: payload) do |response|
@@ -85,6 +79,18 @@ private def exchange_code(authCode : String) : String
     end
 
     json = Hash(String, String | Int32).from_json(body)
+    # We discard the access & refresh tokens, as they're not needed.
     return json["id_token"].as(String)
   end
+end
+
+# Verify and validate the JWT token, returning its payload.
+private def decode_token(token)
+  payload, _ = JWT.decode(
+    token, TodoAPI::RSA_PUBLIC_KEY, JWT::Algorithm::RS256, aud: ENV["CLIENT_ID"]
+  )
+  payload
+rescue ex
+  puts  "token decode failure: #{ex.message}"
+  raise "Token decode failure"
 end

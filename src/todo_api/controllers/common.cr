@@ -1,7 +1,6 @@
 # Allow any CORS request and default the content type.
 before_all do |env|
   env.response.headers.add("Access-Control-Allow-Origin", ENV["CLIENT_URI"])
-  env.response.headers.add("Access-Control-Allow-Credentials", "true")
   env.response.content_type = "application/json"
 end
 

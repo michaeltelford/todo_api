@@ -16,14 +16,12 @@ A HTTP server was needed to build a working API and data model for the TODO fron
 
 The following environment variables are required to run the server:
 
-- PORT
-- DATABASE_URL
-- SESSIONS_SECRET
-- SECURE_SESSIONS
-- TOKEN_EXCHANGE_URL
+- CLIENT_AUTH_URI
 - CLIENT_ID
 - CLIENT_SECRET
-- CLIENT_AUTH_URI
+- DATABASE_URL
+- PORT
+- TOKEN_EXCHANGE_URL
 
 ## Usage
 
@@ -41,6 +39,20 @@ Running `make` will display help info on all available commands.
 
 - You must have a working installation of Crystal. See the `.crystal-version` file for the correct version.
 - You must have Docker (and docker-compose) installed for local development.
+
+### RSA Public Key
+
+The API uses an RSA public key to verify the JWT auth token (sent by the client). Follow these steps to find and save the key that the API uses:
+
+- Open Auth0 and login (requires credentials)
+- Open the `TODO Checklist` app
+- Go to `Settings -> Advanced Settings -> Certificates`
+- Download the PEM certificate to `~/Downloads`
+- Open a shell at the repo's root directory
+- Run the following command to save the public RSA key to file:
+  ```
+  openssl x509 -pubkey -noout -in ~/Downloads/todo-checklist.pem > id_rsa.pub
+  ```
 
 ## Contributing
 

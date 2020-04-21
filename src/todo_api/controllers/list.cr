@@ -2,7 +2,7 @@
 get "/lists" do |env|
   halt env, 401 unless authorized?(env)
 
-  email = env.session.string("email")
+  email = get_current_user(env)[:email]
   lists = List.list(email)
 
   { lists: lists }.to_json
@@ -30,11 +30,11 @@ post "/list" do |env|
   payload = json["list"].as(Hash)
   halt env, 400 unless payload["name"]? && payload["todos"]?
 
-  name    = payload["name"].to_s
-  todos   = payload["todos"].as(JSON::Any)
-  session = get_user_session(env)
+  current_user = get_current_user(env)
+  name  = payload["name"].to_s
+  todos = payload["todos"].as(JSON::Any)
 
-  list = List.new(session[:email], session[:name], name, todos)
+  list = List.new(current_user[:email], current_user[:name], name, todos)
   list.save rescue halt env, 400
 
   halt env, 201
