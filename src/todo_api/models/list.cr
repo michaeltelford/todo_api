@@ -1,20 +1,20 @@
 class List < Model
   MAX_LISTS_PER_USER = 5
 
-  getter   id         : Int32
-  getter   user_email : String
-  getter   user_name  : String?
-  property name       : String
-  property todos      : JSON::Any
-  getter   created_on : Time
-  getter   updated_on : Time
+  getter id : Int32
+  getter user_email : String
+  getter user_name : String?
+  property name : String
+  property todos : JSON::Any
+  getter created_on : Time
+  getter updated_on : Time
 
   JSON.mapping(
-    id:         Int32,
+    id: Int32,
     user_email: String,
-    user_name:  String?,
-    name:       String,
-    todos:      JSON::Any,
+    user_name: String?,
+    name: String,
+    todos: JSON::Any,
     created_on: Time,
     updated_on: Time,
   )

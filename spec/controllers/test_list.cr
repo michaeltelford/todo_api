@@ -26,10 +26,10 @@ describe TodoAPI do
           todos: [
             {
               name: "hello",
-              done: true
-            }
-          ]
-        }
+              done: true,
+            },
+          ],
+        },
       }.to_json
     )
 

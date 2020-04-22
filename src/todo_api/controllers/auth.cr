@@ -4,7 +4,7 @@ post "/session" do |env|
 
   authCode = payload["authorizationCode"].as(String)
   id_token = exchange_code(authCode)
-  payload  = decode_token(id_token)
+  payload = decode_token(id_token)
 
   {
     session: {
@@ -22,9 +22,9 @@ end
 # user's name and email if successful.
 # Note, before_all has a bug and doesn't filter the path.
 def authorized?(env) : Bool
-  auth     = env.request.headers["Authorization"]
+  auth = env.request.headers["Authorization"]
   id_token = auth.split("Bearer ").last
-  payload  = decode_token(id_token)
+  payload = decode_token(id_token)
 
   set_current_user(env, payload)
   true
@@ -51,8 +51,8 @@ end
 
 # Set the current user in the env from an JWT payload.
 private def set_current_user(env, payload)
-  env.set("current_user_email",   payload["email"].as_s)
-  env.set("current_user_name",    payload["name"].as_s)
+  env.set("current_user_email", payload["email"].as_s)
+  env.set("current_user_name", payload["name"].as_s)
   env.set("current_user_picture", payload["picture"].as_s) if payload["picture"]?
 end
 
@@ -61,20 +61,20 @@ private def exchange_code(authCode : String) : String
   url = ENV["TOKEN_EXCHANGE_URL"]
   headers = HTTP::Headers{
     "Content-Type" => "application/x-www-form-urlencoded",
-    "Accept"       => "application/json"
+    "Accept"       => "application/json",
   }
   payload = {
     "grant_type"    => "authorization_code",
     "client_id"     => ENV["CLIENT_ID"],
     "client_secret" => ENV["CLIENT_SECRET"],
     "code"          => authCode,
-    "redirect_uri"  => ENV["CLIENT_AUTH_URI"]
+    "redirect_uri"  => ENV["CLIENT_AUTH_URI"],
   }
 
   HTTP::Client.post(url, headers, form: payload) do |response|
     body = response.body_io.gets_to_end
     unless response.success?
-      puts  "token exchange failure: #{response.status} #{body}"
+      puts "token exchange failure: #{response.status} #{body}"
       raise "Token exchange failure"
     end
 
@@ -91,6 +91,6 @@ private def decode_token(token)
   )
   payload
 rescue ex
-  puts  "token decode failure: #{ex.message}"
+  puts "token decode failure: #{ex.message}"
   raise "Token decode failure"
 end

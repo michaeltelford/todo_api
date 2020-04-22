@@ -15,4 +15,4 @@ options "/*" do |env|
 end
 
 # Healthcheck.
-get "/healthcheck" {}
+get "/healthcheck" { }
