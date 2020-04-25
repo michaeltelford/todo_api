@@ -1,7 +1,7 @@
 # 404 is for when a resource doesn't exist, a missing route is a 500.
 error 404 do |env|
   env.response.content_type = "application/json"
-  json = {error: "Not found"}.to_json
+  json = {error: "Path not found"}.to_json
   halt env, status_code: 500, response: json
 end
 
