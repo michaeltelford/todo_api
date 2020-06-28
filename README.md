@@ -2,13 +2,19 @@
 
 HTTP API written in Crystal.
 
-Forms the server backend for the TODO Checklist app written in React. Backed by a PostgreSQL database. Uses Docker and docker-compose to form the infrastructure.
+Forms the server backend for the [TODO Checklist app](https://github.com/michaeltelford/todo) written in React. Backed by a PostgreSQL database. Uses Docker and docker-compose to form the infrastructure.
+
+The actual application can be used by visiting:
+
+https://todo-checklist.surge.sh
+
+Auth is handled by Auth0. You can login using your Github or Google account. Or you can sign up for an Auth0 account. You are limited to 5 lists (with unlimited TODO's) per account.
 
 ## Rationale
 
 A HTTP server was needed to build a working API and data model for the TODO frontend application. I choose Crystal because:
 
-- It's similar in syntax to Ruby which I know and like. It's both fun and quick to develop with.
+- It's similar in syntax to Ruby which I know and love. It's both fun and quick to develop with.
 - It's blindingly fast! Sub 10ms response times (having pulled data from the DB) are an average, while running on a docker network.
 - It compiles down into a native binary which makes for small Docker images, capable of being deployed anywhere.
 
