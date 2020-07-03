@@ -51,7 +51,7 @@ class List < Model
   def self.list(user_email : String) : Array(List)
     lists = Array(List).new
 
-    sql = "SELECT * FROM list WHERE user_email = $1;"
+    sql = "SELECT * FROM list WHERE user_email = $1 ORDER BY created_on;"
     open do |db|
       db.query(sql, user_email) { |rs| rs.each { lists << new(rs) } }
     end
