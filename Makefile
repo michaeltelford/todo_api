@@ -5,10 +5,11 @@ help:
 	@echo "TODO API"
 	@echo "--------"
 	@echo ""
-	@echo "env   : Create an .env file for required variables."
-	@echo "build : Build the production alpine docker image."
-	@echo "run   : Run the app for development using docker-compose."
-	@echo "test  : Run the tests."
+	@echo "env    : Create an .env file for required variables."
+	@echo "build  : Build a production alpine docker image."
+	@echo "run    : Run the app for development using docker-compose."
+	@echo "test   : Run the tests."
+	@echo "deploy : Deploy to prod."
 	@echo ""
 
 env:
@@ -30,3 +31,6 @@ test:
 	docker rm -f db 2>/dev/null || true
 	KEMAL_ENV=test POSTGRES_DB=test docker-compose run --rm api crystal spec || true
 	docker rm -f db
+
+deploy:
+	git push heroku master
