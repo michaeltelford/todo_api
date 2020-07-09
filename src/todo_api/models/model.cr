@@ -1,4 +1,6 @@
 class Model
+  include JSON::Serializable
+
   CONNECTION_STRING = ENV["DATABASE_URL"]
 
   def self.open

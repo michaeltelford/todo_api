@@ -9,26 +9,13 @@ class List < Model
   getter created_on : Time
   getter updated_on : Time
 
-  JSON.mapping(
-    id: Int32,
-    user_email: String,
-    user_name: String?,
-    name: String,
-    todos: JSON::Any,
-    created_on: Time,
-    updated_on: Time,
-  )
-
   def initialize(@id, @user_email, @user_name, @name, @todos, @created_on, @updated_on)
-    super()
   end
 
   def initialize(@user_email, @user_name, @name, @todos)
     @id = 0
     @created_on = Time.local
     @updated_on = Time.local
-
-    super()
   end
 
   def initialize(rs : DB::ResultSet)

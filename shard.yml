@@ -8,13 +8,14 @@ targets:
   todo_api:
     main: src/todo_api.cr
 
-crystal: 0.33.0
+crystal: 0.35.1
 
 license: MIT
 
 dependencies:
   kemal:
     github: kemalcr/kemal
+    commit: a8c0f09b858162bd13c96663febef5527b322a32
   pg:
     github: will/crystal-pg
   jwt:
@@ -23,5 +24,3 @@ dependencies:
 development_dependencies:
   debug:
     github: Sija/debug.cr
-  spec-kemal:
-    github: michaeltelford/spec-kemal

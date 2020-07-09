@@ -15,7 +15,7 @@ services:
       - POSTGRES_USER=postgres
       - TZ=Europe/Belfast
   api:
-    image: crystallang/crystal:0.33.0-alpine
+    image: crystallang/crystal:0.35.1-alpine
     container_name: api
     depends_on:
       - db
