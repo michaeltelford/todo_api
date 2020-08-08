@@ -28,12 +28,14 @@ The following environment variables are required to run the server:
 - DATABASE_URL
 - PORT
 - TOKEN_EXCHANGE_URL
+- RSA_PUBLIC_KEY
 
 ## Usage
 
 At the root of the repo, you can run the following commands:
 
 ```sh
+make env    # Creates a stubbed .env file for you to fill in.
 make build  # Builds the production Docker alpine image.
 make run    # Run the API and DB containers locally (for dev/testing).
 make test   # Run the tests (also using docker-compose).
@@ -43,22 +45,17 @@ Running `make` will display help info on all available commands.
 
 ## Development
 
-- You must have a working installation of Crystal. See the `.crystal-version` file for the correct version.
+- It helps to have a local installation of Crystal. See the `.crystal-version` file for the correct version.
 - You must have Docker (and docker-compose) installed for local development.
 
 ### RSA Public Key
 
 The API uses an RSA public key to verify the JWT auth token (sent by the client). Follow these steps to find and save the key that the API uses:
 
-- Open Auth0 and login (requires credentials)
-- Open the `TODO Checklist` app
-- Go to `Settings -> Advanced Settings -> Certificates`
-- Download the PEM certificate to `~/Downloads`
-- Open a shell at the repo's root directory
-- Run the following command to save the public RSA key to file:
-  ```
-  openssl x509 -pubkey -noout -in ~/Downloads/todo-checklist.pem > id_rsa.pub
-  ```
+- Open https://todo-checklist.auth0.com/pem in a browser
+- Download the PEM certificate
+- Base64 encode the contents of the downloaded file
+- Set the `RSA_PUBLIC_KEY` ENV var with the encoded value
 
 ## Contributing
 

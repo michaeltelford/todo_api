@@ -8,3 +8,4 @@ pgdata/
 .env
 **/spike.cr
 todo_api
+*.pem

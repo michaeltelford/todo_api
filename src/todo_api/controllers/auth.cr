@@ -87,7 +87,7 @@ end
 # Verify and validate the JWT token, returning its payload.
 private def decode_token(token)
   payload, _ = JWT.decode(
-    token, TodoAPI::RSA_PUBLIC_KEY, JWT::Algorithm::RS256, aud: ENV["CLIENT_ID"]
+    token, ENV["RSA_PUBLIC_KEY"], JWT::Algorithm::RS256, aud: ENV["CLIENT_ID"]
   )
   payload
 rescue ex

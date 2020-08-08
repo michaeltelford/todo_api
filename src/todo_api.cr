@@ -1,3 +1,14 @@
+# Require standard libs / shards.
+require "uri"
+require "json"
+require "http"
+require "db"
+require "pg"
+require "jwt"
+require "kemal"
+require "base64"
+# require "debug"
+
 # Server API providing CRUD operations on the TODO data model.
 module TodoAPI
   VERSION = "0.1.0"
@@ -9,9 +20,8 @@ module TodoAPI
     DATABASE_URL
     PORT
     TOKEN_EXCHANGE_URL
+    RSA_PUBLIC_KEY
   ]
-
-  RSA_PUBLIC_KEY = File.read("id_rsa.pub")
 
   # Assert the required ENV vars are present.
   def self.assert_env_vars
@@ -30,21 +40,18 @@ module TodoAPI
 
     ENV["CLIENT_URI"] = client_uri
   end
-end
 
-# Require standard libs / shards.
-require "uri"
-require "json"
-require "http"
-require "db"
-require "pg"
-require "jwt"
-require "kemal"
-# require "debug"
+  # Decode and set the RSA_PUBLIC_KEY in ENV.
+  def self.set_rsa_public_key
+    decoded_rsa = Base64.decode_string(ENV["RSA_PUBLIC_KEY"])
+    ENV["RSA_PUBLIC_KEY"] = decoded_rsa
+  end
+end
 
 # Pre-requisites for loading code...
 TodoAPI.assert_env_vars
 TodoAPI.set_env_client_uri
+TodoAPI.set_rsa_public_key
 
 # Require local code files.
 require "./todo_api/models/model"
