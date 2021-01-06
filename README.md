@@ -53,8 +53,8 @@ Running `make` will display help info on all available commands.
 The API uses an RSA public key to verify the JWT auth token (sent by the client). Follow these steps to find and save the key that the API uses:
 
 - Open https://todo-checklist.auth0.com/pem in a browser
-- Download the PEM certificate
-- Base64 encode the contents of the downloaded file
+- Download the PEM certificate to `~/Downloads`
+- Base64 encode the contents of the downloaded file with: `base64 -w 0 ~/Downloads/todo-checklist.pem`
 - Set the `RSA_PUBLIC_KEY` ENV var with the encoded value
 
 ## Contributing
