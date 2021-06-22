@@ -1,5 +1,5 @@
 class List < Model
-  MAX_LISTS_PER_USER = 5
+  MAX_LISTS_PER_USER = 20
 
   getter id : Int32
   getter user_email : String
