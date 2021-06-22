@@ -54,8 +54,9 @@ The API uses an RSA public key to verify the JWT auth token (sent by the client)
 
 - Open https://todo-checklist.auth0.com/pem in a browser
 - Download the PEM certificate to `~/Downloads`
-- Base64 encode the contents of the downloaded file with: `base64 -w 0 ~/Downloads/todo-checklist.pem`
+- Base64 encode the contents of the downloaded file using an online base64 encoder ensuring there are no `\n`'s anywhere.
 - Set the `RSA_PUBLIC_KEY` ENV var with the encoded value
+- **Note**: If you get a login cycle, check the logs for '`token decode failure: Neither PUB or PRIV key: error: <reason>`' indicating that the `RSA_PUBLIC_KEY` isn't right.
 
 ## Contributing
 

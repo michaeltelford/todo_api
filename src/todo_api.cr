@@ -43,7 +43,10 @@ module TodoAPI
 
   # Decode and set the RSA_PUBLIC_KEY in ENV.
   def self.set_rsa_public_key
-    decoded_rsa = Base64.decode_string(ENV["RSA_PUBLIC_KEY"])
+    rsa_public_key = ENV["RSA_PUBLIC_KEY"]
+    puts "RSA_PUBLIC_KEY: '#{rsa_public_key}'"
+
+    decoded_rsa = Base64.decode_string(rsa_public_key)
     ENV["RSA_PUBLIC_KEY"] = decoded_rsa
   end
 end
