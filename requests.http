@@ -1,0 +1,66 @@
+@apiUrl = http://localhost:8080
+@jwtToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlJqazNPRFF5TWpjMVEwTXpRemN6UVRoRU9URXhRa0l3UWpFeU5qSkJPRUZHUkRoRk1VSTBOZyJ9.eyJuaWNrbmFtZSI6Im1pY2hhZWx0ZWxmb3JkIiwibmFtZSI6Ik1pY2hhZWwgVGVsZm9yZCIsInBpY3R1cmUiOiJodHRwczovL2F2YXRhcnMuZ2l0aHVidXNlcmNvbnRlbnQuY29tL3UvMjA2MTYyNDE_dj00IiwidXBkYXRlZF9hdCI6IjIwMjEtMDctMDVUMTU6NTU6MzAuOTg3WiIsImVtYWlsIjoibWljaGFlbC50ZWxmb3JkQGxpdmUuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsImlzcyI6Imh0dHBzOi8vdG9kby1jaGVja2xpc3QuYXV0aDAuY29tLyIsInN1YiI6ImdpdGh1YnwyMDYxNjI0MSIsImF1ZCI6Ikt6ZmNjd0lvMm1wTjlaMEJDSGlxRWs2ZmM2U2JEOTRBIiwiaWF0IjoxNjI1NTAwNTMyLCJleHAiOjE2MjU1MDQxMzJ9.CdYTPnB09Gv-HXxDpdIxUq4acKzLTv0ECGydWHzZ14iQh9RwRtc0IDTpe6VPwkEXDm_l3BK3n_cNAKHCVp-wbD8wnEkFghV05h3zNzxF-ZZbIHQugk4DgmJ3kOOw9ZwVwaP15932rZDutOWzzWO94G4t_G0f0ccktdSobJm8cmirrTjphjA6p3FEnAJ3iCo9kKo6floCIXlhPCZ4rT66TEfpUwyKGv95oZPlE_zJxehvjWM3gh0Ki4z1cZ98YmRxEm_uQQDbvvAfdgzFfkeH5yODd_L0e_x1iPQFtsnzDSMqw19UKErfoY2yQ1ueZv2i-InyfkX3UwSCDihC4fKsNA
+
+
+### Healthcheck
+GET {{apiUrl}}/healthcheck
+
+
+### Create List
+POST {{apiUrl}}/list
+Authorization: {{jwtToken}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "list": {
+    "name": "Test List {{$guid}}",
+    "todos": [
+      { "name": "Wash Car", "done": false },
+      { "name": "Play Records", "done": true },
+      { "name": "Watch The Bikes", "done": false },
+      { "name": "Write Code", "done": true },
+      { "name": "Netflix & Chill", "done": false }
+    ]
+  }
+}
+
+
+### Get Lists
+# @name lists
+GET {{apiUrl}}/lists
+Authorization: {{jwtToken}}
+Accept: 'application/json'
+
+
+### Get List By ID
+# @name list
+GET {{apiUrl}}/list/{{lists.response.body.lists[(@.length-1)].id}}
+Authorization: {{jwtToken}}
+Accept: 'application/json'
+
+
+### Update List
+# @name list
+PUT {{apiUrl}}/list/{{lists.response.body.lists[(@.length-1)].id}}
+Authorization: {{jwtToken}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "list": {
+    "name": "Test List {{$guid}}",
+    "todos": [
+      { "name": "Wash Car", "done": true },
+      { "name": "Play Records", "done": true },
+      { "name": "Watch The Bikes", "done": true },
+      { "name": "Write Code", "done": true },
+      { "name": "Netflix & Chill", "done": false }
+    ]
+  }
+}
+
+
+### Delete List
+DELETE {{apiUrl}}/list/{{lists.response.body.lists[(@.length-1)].id}}
+Authorization: {{jwtToken}}

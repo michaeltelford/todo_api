@@ -74,7 +74,7 @@ private def exchange_code(authCode : String) : String
   HTTP::Client.post(url, headers, form: payload) do |response|
     body = response.body_io.gets_to_end
     unless response.success?
-      puts "token exchange failure: #{response.status} #{body}"
+      puts "Token exchange failure: #{response.status} #{body}"
       raise "Token exchange failure"
     end
 
@@ -91,6 +91,6 @@ private def decode_token(token)
   )
   payload
 rescue ex
-  puts "token decode failure: #{ex.message}"
+  puts "Token decode failure: #{ex.message}"
   raise "Token decode failure"
 end
