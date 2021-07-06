@@ -1,4 +1,4 @@
-.PHONY: help env build run test
+.PHONY: help env build run test deploy
 
 help:
 	@echo ""

@@ -1,0 +1,2 @@
+ALTER TABLE list
+ALTER COLUMN todos SET DEFAULT '[]';

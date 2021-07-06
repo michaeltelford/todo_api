@@ -5,10 +5,10 @@ services:
     container_name: db
     restart: always
     volumes:
-      - "./init.sql:/docker-entrypoint-initdb.d/init.sql"
+      - "./migrations:/docker-entrypoint-initdb.d"
       # - "./pgdata:/var/lib/postgresql/data"
-    # ports:
-    #   - "5432:5432"
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_DB # Set in Makefile
       - POSTGRES_PASSWORD=Secret1

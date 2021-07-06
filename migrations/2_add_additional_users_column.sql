@@ -1,0 +1,2 @@
+ALTER TABLE list
+ADD COLUMN IF NOT EXISTS additional_users JSON NOT NULL DEFAULT '[]';
