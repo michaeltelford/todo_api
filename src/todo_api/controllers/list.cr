@@ -2,8 +2,8 @@
 get "/lists" do |env|
   halt env, 401 unless authorized?(env)
 
-  email = get_current_user(env)[:email]
-  lists = List.list(email)
+  email, _ = get_current_user(env)
+  lists = List.all(email)
 
   {lists: lists}.to_json
 end
@@ -25,16 +25,10 @@ end
 post "/list" do |env|
   halt env, 401 unless authorized?(env)
 
-  json = env.params.json.as(Hash)
-  halt env, 400 unless json["list"]?
-  payload = json["list"].as(Hash)
-  halt env, 400 unless payload["name"]? && payload["todos"]?
+  list_name, todos, additional_users = parse_request(env) rescue halt env, 400
+  email, user_name = get_current_user(env)
 
-  current_user = get_current_user(env)
-  name = payload["name"].to_s
-  todos = payload["todos"].as(JSON::Any)
-
-  list = List.new(current_user[:email], current_user[:name], name, todos)
+  list = List.new(email, user_name, list_name, todos, additional_users)
   list.save rescue halt env, 400
 
   halt env, 201
@@ -44,14 +38,7 @@ end
 put "/list/:id" do |env|
   halt env, 401 unless authorized?(env)
 
-  json = env.params.json.as(Hash)
-  halt env, 400 unless json["list"]?
-  payload = json["list"].as(Hash)
-  halt env, 400 unless payload["name"]? && payload["todos"]?
-
-  name = payload["name"].to_s
-  todos = payload["todos"].as(JSON::Any)
-
+  name, todos, additional_users = parse_request(env) rescue halt env, 400
   list_id = env.params.url["id"]
   list = List.get(list_id)
 
@@ -60,6 +47,7 @@ put "/list/:id" do |env|
 
   list.name = name
   list.todos = todos
+  list.additional_users = additional_users
 
   list.save rescue halt env, 400
 end
@@ -77,4 +65,15 @@ delete "/list/:id" do |env|
   list.delete
 
   halt env, 204
+end
+
+private def parse_request(env) : Tuple
+  json = env.params.json
+  body = json["list"].as(Hash(String, JSON::Any))
+
+  {
+    body["name"].as_s,
+    body["todos"],
+    body["additional_users"],
+  }
 end

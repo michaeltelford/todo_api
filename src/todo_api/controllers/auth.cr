@@ -1,9 +1,7 @@
 # Exchange the auth code for a JWT token, used in subsequent requests.
 post "/session" do |env|
-  payload = env.params.json.as(Hash)
-
-  authCode = payload["authorizationCode"].as(String)
-  id_token = exchange_code(authCode)
+  auth_code = parse_auth_code(env) rescue halt env, 400
+  id_token = exchange_code(auth_code)
   payload = decode_token(id_token)
 
   {
@@ -20,7 +18,7 @@ end
 
 # Helper method used in any endpoints requiring auth. Sets the authorised
 # user's name and email if successful.
-# Note, before_all has a bug and doesn't filter the path.
+# Note, kemal's before_all has a bug and doesn't filter the path so can't be used.
 def authorized?(env) : Bool
   auth = env.request.headers["Authorization"]
   id_token = auth.split("Bearer ").last
@@ -35,17 +33,16 @@ end
 # Helper method used in any endpoints requiring auth.
 # Returns true if the user has access to the given list.
 def allow_access?(env, list : List) : Bool
-  return false unless env.get?("current_user_email")
-
-  env.get("current_user_email") == list.user_email
+  current_user_email = env.get?("current_user_email")
+  list.has_access?(current_user_email)
 end
 
 # Returns the authorised user's username and email.
-def get_current_user(env) : NamedTuple
+def get_current_user(env) : Tuple(String, String, String?)
   {
-    email:   env.get("current_user_email").as(String),
-    name:    env.get("current_user_name").as(String),
-    picture: env.get("current_user_picture").as(String),
+    env.get("current_user_email").as(String),
+    env.get("current_user_name").as(String),
+    env.get?("current_user_picture").as?(String),
   }
 end
 
@@ -56,8 +53,14 @@ private def set_current_user(env, payload)
   env.set("current_user_picture", payload["picture"].as_s) if payload["picture"]?
 end
 
+# Extract the authorization_code from the request.
+private def parse_auth_code(env) : String
+  payload = env.params.json.as(Hash)
+  payload["authorization_code"].as(String)
+end
+
 # Exchange an auth0 authorization code for a JWT ID token.
-private def exchange_code(authCode : String) : String
+private def exchange_code(auth_code : String) : String
   url = ENV["TOKEN_EXCHANGE_URL"]
   headers = HTTP::Headers{
     "Content-Type" => "application/x-www-form-urlencoded",
@@ -67,7 +70,7 @@ private def exchange_code(authCode : String) : String
     "grant_type"    => "authorization_code",
     "client_id"     => ENV["CLIENT_ID"],
     "client_secret" => ENV["CLIENT_SECRET"],
-    "code"          => authCode,
+    "code"          => auth_code,
     "redirect_uri"  => ENV["CLIENT_AUTH_URI"],
   }
 
