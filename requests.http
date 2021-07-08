@@ -1,14 +1,15 @@
-@apiUrl = http://localhost:8080
-@jwtToken = Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IlJqazNPRFF5TWpjMVEwTXpRemN6UVRoRU9URXhRa0l3UWpFeU5qSkJPRUZHUkRoRk1VSTBOZyJ9.eyJuaWNrbmFtZSI6InRvZG8uY2hlY2tsaXN0IiwibmFtZSI6InRvZG8uY2hlY2tsaXN0QHlhaG9vLmNvbSIsInBpY3R1cmUiOiJodHRwczovL3MuZ3JhdmF0YXIuY29tL2F2YXRhci8zNmVlMWI4YTY1MDY3MThiMDI5NDU5MjI1MTA1NzBlZD9zPTQ4MCZyPXBnJmQ9aHR0cHMlM0ElMkYlMkZjZG4uYXV0aDAuY29tJTJGYXZhdGFycyUyRnRvLnBuZyIsInVwZGF0ZWRfYXQiOiIyMDIxLTA3LTA3VDEwOjA0OjU4Ljg3MFoiLCJlbWFpbCI6InRvZG8uY2hlY2tsaXN0QHlhaG9vLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJpc3MiOiJodHRwczovL3RvZG8tY2hlY2tsaXN0LmF1dGgwLmNvbS8iLCJzdWIiOiJhdXRoMHw1ZTkyMjBjNTE1ZGY4YTBjNTZlODUxYTAiLCJhdWQiOiJLemZjY3dJbzJtcE45WjBCQ0hpcUVrNmZjNlNiRDk0QSIsImlhdCI6MTYyNTY1MjMwMCwiZXhwIjoxNjI1NjU1OTAwfQ.HxAerNkOLCUMgcCbAexCwvuvFzVP5AdK-ysDXynutwx-3LQR67uI4Q7WgYqqAWTTMRbokhG0j1V7ZnG5SYAmqgKCqQwsZOAIdS-iy9HzNItkw0lYC6l8ca-rbUAtNW_41gHL700tHjWM3iq1jg-LArrNq9SNAYhONN4GG7lNvrDIA8zlhUuuLZoKotgGL2pzHbThHcwNB3v2orSJXWC1pdVUbxxL2wjEVK9CqFOef6CnufkbNB2OiMP4DxjGD5FPeQhJeB-od6M3zCnHDcR57n0b7ATqu6jJkHc2dT07VKt09dcJGiQoAa88hczHFBLVNG7PNaXpzC9Q1wNsW8O_zQ
+# Login as 'todo.checklist@yahoo.com', copy the token from the browser and set in .env
+@token = {{$dotenv JWT_TOKEN}}
+@api = http://localhost:8080
 
 
 ### Healthcheck
-GET {{apiUrl}}/healthcheck
+GET {{api}}/healthcheck
 
 
 ### Create List
-POST {{apiUrl}}/list
-Authorization: {{jwtToken}}
+POST {{api}}/list
+Authorization: {{token}}
 Accept: application/json
 Content-Type: application/json
 
@@ -23,7 +24,7 @@ Content-Type: application/json
       { "name": "Netflix & Chill", "done": false }
     ],
     "additional_users": [
-      "todo.checklist@yahoo.com"
+      "michael.telford@live.com"
     ]
   }
 }
@@ -31,22 +32,22 @@ Content-Type: application/json
 
 ### Get Lists
 # @name lists
-GET {{apiUrl}}/lists
-Authorization: {{jwtToken}}
+GET {{api}}/lists
+Authorization: {{token}}
 Accept: 'application/json'
 
 
 ### Get List By ID
 # @name list
-GET {{apiUrl}}/list/{{lists.response.body.lists[(@.length-1)].id}}
-Authorization: {{jwtToken}}
+GET {{api}}/list/{{lists.response.body.lists[(@.length-1)].id}}
+Authorization: {{token}}
 Accept: 'application/json'
 
 
 ### Update List
 # @name list
-PUT {{apiUrl}}/list/{{lists.response.body.lists[(@.length-1)].id}}
-Authorization: {{jwtToken}}
+PUT {{api}}/list/{{lists.response.body.lists[(@.length-1)].id}}
+Authorization: {{token}}
 Accept: application/json
 Content-Type: application/json
 
@@ -66,5 +67,5 @@ Content-Type: application/json
 
 
 ### Delete List
-DELETE {{apiUrl}}/list/{{lists.response.body.lists[(@.length-1)].id}}
-Authorization: {{jwtToken}}
+DELETE {{api}}/list/{{lists.response.body.lists[(@.length-1)].id}}
+Authorization: {{token}}
