@@ -7,6 +7,12 @@
 GET {{api}}/healthcheck
 
 
+### Get Session
+GET {{api}}/session
+Authorization: {{token}}
+Accept: application/json
+
+
 ### Create List
 POST {{api}}/list
 Authorization: {{token}}

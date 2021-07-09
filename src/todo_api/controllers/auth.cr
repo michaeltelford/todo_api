@@ -16,6 +16,21 @@ rescue
   halt env, 401
 end
 
+# Get the current user info from the JWT token.
+get "/session" do |env|
+  halt env, 401 unless authorized?(env)
+
+  email, name, picture = get_current_user(env)
+
+  {
+    session: {
+      email:   email,
+      name:    name,
+      picture: picture,
+    },
+  }.to_json
+end
+
 # Helper method used in any endpoints requiring auth. Sets the authorised
 # user's name and email if successful.
 # Note, kemal's before_all has a bug and doesn't filter the path so can't be used.
