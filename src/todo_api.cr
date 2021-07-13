@@ -57,6 +57,7 @@ TodoAPI.set_env_client_uri
 TodoAPI.set_rsa_public_key
 
 # Require local code files.
+require "./todo_api/models/database" # Establishes a connection.
 require "./todo_api/models/model"
 require "./todo_api/models/**"
 require "./todo_api/controllers/auth"
@@ -67,3 +68,5 @@ Kemal.run do |config|
   server = config.server.not_nil!
   server.bind_tcp("0.0.0.0", ENV["PORT"].to_i)
 end
+
+Database.disconnect
