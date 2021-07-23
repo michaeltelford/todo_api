@@ -58,6 +58,11 @@ The API uses an RSA public key to verify the JWT auth token (sent by the client)
 - Set the `RSA_PUBLIC_KEY` ENV var with the encoded value
 - **Note**: If you get a login cycle, check the logs for '`token decode failure: Neither PUB or PRIV key: error: <reason>`' indicating that the `RSA_PUBLIC_KEY` isn't right.
 
+### TODO
+
+- Tests
+- Validators
+
 ## Contributing
 
 1. Fork it (<https://github.com/your-github-user/todo_api/fork>)
