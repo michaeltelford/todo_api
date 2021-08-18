@@ -39,15 +39,18 @@ module TodoAPI
     client_uri += ":#{auth_uri.port}" if auth_uri.port
 
     ENV["CLIENT_URI"] = client_uri
+
+    puts "CLIENT_URI: '#{ENV["CLIENT_URI"]}'"
   end
 
   # Decode and set the RSA_PUBLIC_KEY in ENV.
   def self.set_rsa_public_key
     rsa_public_key = ENV["RSA_PUBLIC_KEY"]
-    puts "RSA_PUBLIC_KEY: '#{rsa_public_key}'"
-
     decoded_rsa = Base64.decode_string(rsa_public_key)
+
     ENV["RSA_PUBLIC_KEY"] = decoded_rsa
+
+    puts "RSA_PUBLIC_KEY: '#{ENV["RSA_PUBLIC_KEY"]}'"
   end
 end
 
