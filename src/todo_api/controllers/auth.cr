@@ -1,77 +1,89 @@
-# Exchange the auth code for a JWT token, used in subsequent requests.
-post "/session" do |env|
-  auth_code = parse_auth_code(env) rescue halt env, 400
-  id_token = exchange_code(auth_code)
-  payload = decode_token(id_token)
+class TodoAPI
+  def draw_auth_routes
+    # Exchange the auth code for a JWT token, used in subsequent requests.
+    post "/session" do |context, _|
+      auth_code = parse_auth_code(context)
+      id_token = exchange_code(auth_code)
+      token = decode_token(id_token)
 
-  {
-    session: {
-      token:   id_token,
-      name:    payload["name"].as_s,
-      email:   payload["email"].as_s,
-      picture: payload["picture"].as_s,
-    },
-  }.to_json
-rescue
-  halt env, 401
-end
+      send_json(context, {
+        session: {
+          token:   id_token,
+          name:    token["name"].as_s,
+          email:   token["email"].as_s,
+          picture: token["picture"].as_s,
+        },
+      })
 
-# Get the current user info from the JWT token.
-get "/session" do |env|
-  halt env, 401 unless authorized?(env)
+      context
+    rescue
+      context
+    end
 
-  email, name, picture = get_current_user(env)
+    # Get the current user info from the JWT token.
+    get "/session" do |context, _|
+      authorized?(context)
 
-  {
-    session: {
-      email:   email,
-      name:    name,
-      picture: picture,
-    },
-  }.to_json
+      email, name, picture = get_current_user(context)
+
+      send_json(context, {
+        session: {
+          email:   email,
+          name:    name,
+          picture: picture,
+        },
+      })
+
+      context
+    rescue
+      context
+    end
+  end
 end
 
 # Helper method used in any endpoints requiring auth. Sets the authorised
-# user's name and email if successful.
-# Note, kemal's before_all has a bug and doesn't filter the path so can't be used.
-def authorized?(env) : Bool
-  auth = env.request.headers["Authorization"]
+# user's name and email if successful. Raises an Exception if not.
+def authorized?(context)
+  auth = context.request.headers["Authorization"]
   id_token = auth.split("Bearer ").last
   payload = decode_token(id_token)
 
-  set_current_user(env, payload)
-  true
+  set_current_user(context, payload)
 rescue
-  false
+  halt(context, HTTP::Status::UNAUTHORIZED)
 end
 
 # Helper method used in any endpoints requiring auth.
-# Returns true if the user has access to the given list.
-def allow_access?(env, list : List) : Bool
-  current_user_email = env.get?("current_user_email")
-  list.has_access?(current_user_email)
+# Raises an Exception if the user doesn't has access to the given list.
+def has_access?(context, list : List)
+  current_user_email = context["current_user_email"].as(String)
+  return if list.has_access?(current_user_email)
+
+  halt(context, HTTP::Status::UNAUTHORIZED)
 end
 
 # Returns the authorised user's username and email.
-def get_current_user(env) : Tuple(String, String, String?)
+def get_current_user(context) : Tuple(String, String, String?)
   {
-    env.get("current_user_email").as(String),
-    env.get("current_user_name").as(String),
-    env.get?("current_user_picture").as?(String),
+    context["current_user_email"].as(String),
+    context["current_user_name"].as(String),
+    context["current_user_picture"].as?(String),
   }
 end
 
-# Set the current user in the env from an JWT payload.
-private def set_current_user(env, payload)
-  env.set("current_user_email", payload["email"].as_s)
-  env.set("current_user_name", payload["name"].as_s)
-  env.set("current_user_picture", payload["picture"].as_s) if payload["picture"]?
+# Set the current user in the context from an JWT payload.
+private def set_current_user(context, payload)
+  context["current_user_email"]   = payload["email"].as_s
+  context["current_user_name"]    = payload["name"].as_s
+  context["current_user_picture"] = payload["picture"].as_s if payload["picture"]?
 end
 
 # Extract the authorization_code from the request.
-private def parse_auth_code(env) : String
-  payload = env.params.json.as(Hash)
-  payload["authorization_code"].as(String)
+private def parse_auth_code(context) : String
+  json = get_payload(context)
+  json["authorization_code"].as_s
+rescue
+  halt(context, HTTP::Status::BAD_REQUEST)
 end
 
 # Exchange an auth0 authorization code for a JWT ID token.

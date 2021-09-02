@@ -12,21 +12,9 @@ shards:
     git: https://github.com/Sija/debug.cr.git
     version: 1.1.0
 
-  exception_page:
-    git: https://github.com/crystal-loot/exception_page.git
-    version: 0.1.4
-
   jwt:
     git: https://github.com/crystal-community/jwt.git
     version: 1.4.2
-
-  kemal:
-    git: https://github.com/kemalcr/kemal.git
-    version: 0.26.1+git.commit.a8c0f09b858162bd13c96663febef5527b322a32
-
-  kilt:
-    git: https://github.com/jeromegn/kilt.git
-    version: 0.4.0
 
   openssl_ext:
     git: https://github.com/stakach/openssl_ext.git
@@ -38,5 +26,9 @@ shards:
 
   radix:
     git: https://github.com/luislavena/radix.git
-    version: 0.3.9
+    version: 0.4.1
+
+  router:
+    git: https://github.com/tbrand/router.cr.git
+    version: 0.2.7
 

@@ -13,9 +13,8 @@ crystal: 0.35.1
 license: MIT
 
 dependencies:
-  kemal:
-    github: kemalcr/kemal
-    commit: a8c0f09b858162bd13c96663febef5527b322a32
+  router:
+    github: tbrand/router.cr
   pg:
     github: will/crystal-pg
   jwt:
