@@ -7,7 +7,7 @@ module Middleware
     end
 
     def call(context)
-      # Allow the TODO client to make requests based on it's origin.
+      # Allow the TODO client to make requests based on its origin.
       context.response.headers.add("Access-Control-Allow-Origin", @origin)
       context.response.headers.add("Vary", "Origin")
 

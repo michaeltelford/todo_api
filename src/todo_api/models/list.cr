@@ -79,6 +79,41 @@ class List < Model
     (@user_email == current_user_email) || (@additional_users.as_a.includes?(current_user_email))
   end
 
+  # Returns a Hash containing a summary of the todos as statistics.
+  def todo_summary
+    todos = @todos.as_a
+    done_todos = todos.count { |t| t["done"].as_bool }
+    undone_todos = (todos.size - done_todos)
+
+    {
+      "total_todos" => todos.size,
+      "done_todos" => done_todos,
+      "undone_todos" => undone_todos,
+    }
+  end
+
+  # Returns this list as a Hash with/without the todos (for performance).
+  def to_h(summarise_todos = false)
+    todos_key = "todos"
+    todos_value = @todos
+
+    if summarise_todos
+      todos_key = "todos_summary"
+      todos_value = todo_summary
+    end
+
+    {
+      "id" => @id,
+      "user_email" => @user_email,
+      "user_name" => @user_name,
+      "name" => @name,
+      todos_key => todos_value,
+      "additional_users" => @additional_users,
+      "created_on" => @created_on,
+      "updated_on" => @updated_on,
+    }
+  end
+
   # Insert/create this list.
   private def create
     time = now

@@ -45,14 +45,14 @@ Accept: 'application/json'
 
 ### Get List By ID
 # @name list
-GET {{api}}/list/{{lists.response.body.lists[(@.length-1)].id}}
+GET {{api}}/list/{{lists.response.body.lists[0].id}}
 Authorization: {{token}}
 Accept: 'application/json'
 
 
 ### Update List
 # @name list
-PUT {{api}}/list/{{lists.response.body.lists[(@.length-1)].id}}
+PUT {{api}}/list/{{lists.response.body.lists[0].id}}
 Authorization: {{token}}
 Accept: application/json
 Content-Type: application/json
@@ -73,5 +73,5 @@ Content-Type: application/json
 
 
 ### Delete List
-DELETE {{api}}/list/{{lists.response.body.lists[(@.length-1)].id}}
+DELETE {{api}}/list/{{lists.response.body.lists[0].id}}
 Authorization: {{token}}

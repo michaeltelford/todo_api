@@ -5,7 +5,7 @@ class TodoAPI
       authorized?(context)
 
       email, _ = get_current_user(context)
-      lists = List.all(email)
+      lists = List.all(email).map { |list| list.to_h(summarise_todos: true) }
 
       send_json(context, {lists: lists})
 
@@ -23,7 +23,7 @@ class TodoAPI
       halt(context, HTTP::Status::NOT_FOUND) unless list
       has_access?(context, list)
 
-      send_json(context, {list: list})
+      send_json(context, {list: list.to_h})
 
       context
     rescue
@@ -35,6 +35,7 @@ class TodoAPI
       authorized?(context)
 
       list_name, todos, additional_users = parse_request(context)
+      todos ||= JSON.parse("[]")
       email, user_name = get_current_user(context)
 
       list = List.new(email, user_name, list_name, todos, additional_users)
@@ -58,7 +59,7 @@ class TodoAPI
       has_access?(context, list)
 
       list.name = name
-      list.todos = todos
+      list.todos = todos if todos
       list.additional_users = additional_users
 
       list.save rescue halt(context, HTTP::Status::BAD_REQUEST)
@@ -94,7 +95,7 @@ private def parse_request(context) : Tuple
 
   {
     list["name"].as_s,
-    list["todos"],
+    list["todos"]?,
     list["additional_users"],
   }
 rescue

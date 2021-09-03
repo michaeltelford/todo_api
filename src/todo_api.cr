@@ -7,7 +7,7 @@ require "jwt"
 require "pg"
 require "router"
 require "uri"
-# require "debug"
+require "debug"
 
 require "./todo_api/env"
 
