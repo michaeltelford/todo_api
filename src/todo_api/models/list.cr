@@ -17,8 +17,8 @@ class List < Model
 
   def initialize(@user_email, @user_name, @name, @todos, @additional_users)
     @id = 0
-    @created_on = Time.local
-    @updated_on = Time.local
+    @created_on = now
+    @updated_on = now
   end
 
   def initialize(rs : DB::ResultSet)
@@ -54,7 +54,7 @@ class List < Model
           FROM list
           WHERE user_email = $1
           OR (additional_users)::jsonb ? $1
-          ORDER BY created_on;
+          ORDER BY updated_on DESC;
           SQL
     Database.run.query(sql, user_email) { |rs| rs.each { lists << new(rs) } }
 
@@ -81,15 +81,20 @@ class List < Model
 
   # Insert/create this list.
   private def create
+    time = now
     sql = "SELECT COUNT(id) FROM list WHERE user_email = $1;"
     num_lists = Database.run.scalar(sql, @user_email).as(Int64)
     raise "Max lists achieved" if num_lists >= MAX_LISTS_PER_USER
 
     sql = <<-SQL
-          INSERT INTO list(user_email, user_name, name, todos, additional_users)
-          VALUES ($1, $2, $3, $4, $5);
+          INSERT INTO list(
+            user_email, user_name, name, todos, additional_users, created_on, updated_on
+          )
+          VALUES ($1, $2, $3, $4, $5, $6, $7);
           SQL
-    Database.run.exec(sql, @user_email, @user_name, @name, @todos.to_json, @additional_users.to_json)
+    Database.run.exec(
+      sql, @user_email, @user_name, @name, @todos.to_json, @additional_users.to_json, time, time
+    )
   end
 
   # Update this list by its ID.
@@ -99,6 +104,6 @@ class List < Model
           SET name = $1, todos = $2, additional_users = $3, updated_on = $4
           WHERE id = $5;
           SQL
-    Database.run.exec(sql, @name, @todos.to_json, @additional_users.to_json, Time.local, @id)
+    Database.run.exec(sql, @name, @todos.to_json, @additional_users.to_json, now, @id)
   end
 end

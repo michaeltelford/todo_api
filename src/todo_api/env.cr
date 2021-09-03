@@ -38,7 +38,17 @@ def set_rsa_public_key
   puts "RSA_PUBLIC_KEY: '#{ENV["RSA_PUBLIC_KEY"]}'"
 end
 
-# Returns true if running in "production" mode.
+# Returns true if running in "production" mode. Production is the default if TODO_ENV isn't set.
 def production?
-  ENV["TODO_ENV"]? === "production"
+  ENV.fetch("TODO_ENV", "production") == "production"
+end
+
+# Returns true if running in "development" mode.
+def development?
+  ENV["TODO_ENV"]? == "development"
+end
+
+# Returns true if running in "test" mode.
+def test?
+  ENV["TODO_ENV"]? == "test"
 end
