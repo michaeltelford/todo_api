@@ -11,6 +11,8 @@ require "uri"
 
 require "./todo_api/env"
 
+puts "Starting server..."
+
 # Pre-requisites for loading server code...
 assert_env_vars
 set_env_client_uri

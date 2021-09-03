@@ -3,8 +3,8 @@ class TodoAPI
     # Exchange the auth code for a JWT token, used in subsequent requests.
     post "/session" do |context, _|
       auth_code = parse_auth_code(context)
-      id_token = exchange_code(auth_code)
-      token = decode_token(id_token)
+      id_token = exchange_code(context, auth_code)
+      token = decode_token(context, id_token)
 
       send_json(context, {
         session: {
@@ -46,7 +46,7 @@ end
 def authorized?(context)
   auth = context.request.headers["Authorization"]
   id_token = auth.split("Bearer ").last
-  payload = decode_token(id_token)
+  payload = decode_token(context, id_token)
 
   set_current_user(context, payload)
 rescue
@@ -62,7 +62,7 @@ def has_access?(context, list : List)
   halt(context, HTTP::Status::UNAUTHORIZED)
 end
 
-# Returns the authorised user's username and email.
+# Helper method which returns the authorised user's username and email.
 def get_current_user(context) : Tuple(String, String, String?)
   {
     context["current_user_email"].as(String),
@@ -87,7 +87,7 @@ rescue
 end
 
 # Exchange an auth0 authorization code for a JWT ID token.
-private def exchange_code(auth_code : String) : String
+private def exchange_code(context, auth_code : String) : String
   url = ENV["TOKEN_EXCHANGE_URL"]
   headers = HTTP::Headers{
     "Content-Type" => "application/x-www-form-urlencoded",
@@ -105,7 +105,7 @@ private def exchange_code(auth_code : String) : String
     body = response.body_io.gets_to_end
     unless response.success?
       puts "Token exchange failure: #{response.status} #{body}"
-      raise "Token exchange failure"
+      halt(context, HTTP::Status::BAD_REQUEST)
     end
 
     json = Hash(String, String | Int32).from_json(body)
@@ -115,12 +115,12 @@ private def exchange_code(auth_code : String) : String
 end
 
 # Verify and validate the JWT token, returning its payload.
-private def decode_token(token)
+private def decode_token(context, token)
   payload, _ = JWT.decode(
     token, ENV["RSA_PUBLIC_KEY"], JWT::Algorithm::RS256, aud: ENV["CLIENT_ID"]
   )
   payload
 rescue ex
   puts "Token decode failure: #{ex.message}"
-  raise "Token decode failure"
+  halt(context, HTTP::Status::BAD_REQUEST)
 end
