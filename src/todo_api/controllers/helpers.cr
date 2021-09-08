@@ -47,5 +47,5 @@ end
 # it's likely that you're missing the `rescue` when calling this method.
 def halt(context, status : HTTP::Status)
   send_status(context, status)
-  raise "A HTTP Handler was deliberately halted. If you're seeing this message in development it's probably because your handler is missing a `rescue { context }` block."
+  raise HaltException.new
 end

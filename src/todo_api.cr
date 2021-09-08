@@ -19,6 +19,7 @@ set_env_client_uri
 set_rsa_public_key
 
 # Require local code files.
+require "./todo_api/exceptions/*"
 require "./todo_api/models/database" # Establishes a connection.
 require "./todo_api/models/model"
 require "./todo_api/models/**"

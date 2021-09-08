@@ -16,7 +16,7 @@ class TodoAPI
       })
 
       context
-    rescue
+    rescue HaltException
       context
     end
 
@@ -35,7 +35,7 @@ class TodoAPI
       })
 
       context
-    rescue
+    rescue HaltException
       context
     end
   end

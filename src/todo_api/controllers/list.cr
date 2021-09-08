@@ -10,7 +10,7 @@ class TodoAPI
       send_json(context, {lists: lists})
 
       context
-    rescue
+    rescue HaltException
       context
     end
 
@@ -26,7 +26,7 @@ class TodoAPI
       send_json(context, {list: list.to_h})
 
       context
-    rescue
+    rescue HaltException
       context
     end
 
@@ -44,7 +44,7 @@ class TodoAPI
       send_status(context, HTTP::Status::CREATED)
 
       context
-    rescue
+    rescue HaltException
       context
     end
 
@@ -66,7 +66,7 @@ class TodoAPI
       send_status(context, HTTP::Status::OK)
 
       context
-    rescue
+    rescue HaltException
       context
     end
 
@@ -83,7 +83,7 @@ class TodoAPI
       send_status(context, HTTP::Status::NO_CONTENT)
 
       context
-    rescue
+    rescue HaltException
       context
     end
   end
