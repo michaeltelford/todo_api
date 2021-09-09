@@ -7,7 +7,7 @@ require "jwt"
 require "pg"
 require "router"
 require "uri"
-require "debug"
+# require "debug"
 
 require "./todo_api/env"
 
@@ -48,8 +48,8 @@ class TodoAPI
   private def build_server
     HTTP::Server.new([
       HTTP::LogHandler.new,
-      HTTP::CompressHandler.new,
-      HTTP::ErrorHandler.new(!production?),
+      # HTTP::CompressHandler.new, # This errors some clients for large json responses.
+      HTTP::ErrorHandler.new(verbose: !production?),
       Middleware::HealthcheckHandler.new,
       Middleware::CORSHandler.new(ENV["CLIENT_URI"]),
       route_handler,

@@ -40,14 +40,16 @@ Content-Type: application/json
 # @name lists
 GET {{api}}/lists
 Authorization: {{token}}
-Accept: 'application/json'
+Accept: application/json
+Accept-Encoding: gzip
 
 
 ### Get List By ID
 # @name list
 GET {{api}}/list/{{lists.response.body.lists[0].id}}
 Authorization: {{token}}
-Accept: 'application/json'
+Accept: application/json
+Accept-Encoding: gzip
 
 
 ### Update List
