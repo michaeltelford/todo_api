@@ -8,7 +8,7 @@ The actual application can be used by visiting:
 
 https://todo-checklist.surge.sh
 
-Auth is handled by Auth0. You can login using your Github or Google account. Or you can sign up for an Auth0 account. You are limited to 5 lists (with unlimited TODO's) per account.
+Auth is handled by Auth0. You can login using your Github or Google account. Or you can sign up for an Auth0 account. You are limited to 20 lists (with unlimited TODO's) per account.
 
 ## Rationale
 
