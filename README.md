@@ -58,9 +58,19 @@ The API uses an RSA public key to verify the JWT auth token (sent by the client)
 - Set the `RSA_PUBLIC_KEY` ENV var with the encoded value
 - **Note**: If you get a login cycle, check the logs for '`token decode failure: Neither PUB or PRIV key: error: <reason>`' indicating that the `RSA_PUBLIC_KEY` isn't right.
 
-### TODO
+## Testing
 
-- Tests
+Until the automated unit tests are up and running you can do the following to manually test the API:
+
+- Log into the todo checklist app and copy your auth'd `JWT_TOKEN` value from the browser.
+- Open `.env` and set `JWT_TOKEN=<copied_value>`, then save the file.
+- Start the API (using `make run`).
+- Open the `requests.http` file in VSCode.
+- Execute each request (in order, from top to bottom) ensuring that the expected response is returned.
+
+## TODO
+
+- Automated Unit Tests
 - Validators
 
 ## Contributing
