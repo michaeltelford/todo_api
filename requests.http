@@ -3,8 +3,8 @@
 @api = http://localhost:8080
 
 
-### Healthcheck
-GET {{api}}/healthcheck
+### Health Check
+GET {{api}}/health
 
 
 ### Get Session
