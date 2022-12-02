@@ -2,7 +2,7 @@ class TodoAPI
   def draw_list_routes
     # Get the user's todo lists.
     get "/lists" do |context, _|
-      authorized?(context)
+      authenticated?(context)
 
       email, _ = get_current_user(context)
       lists = List.all(email).map { |list| list.to_h(summarise_todos: true) }
@@ -16,7 +16,7 @@ class TodoAPI
 
     # Get the todo list by ID, providing it belongs to the user.
     get "/list/:id" do |context, url_params|
-      authorized?(context)
+      authenticated?(context)
 
       list = List.get(url_params["id"])
 
@@ -32,7 +32,7 @@ class TodoAPI
 
     # Create a todo list belonging to the user.
     post "/list" do |context, _|
-      authorized?(context)
+      authenticated?(context)
 
       list_name, todos, additional_users = parse_request(context)
       todos ||= JSON.parse("[]")
@@ -50,7 +50,7 @@ class TodoAPI
 
     # Update the todo list by ID, providing it belongs to the user.
     put "/list/:id" do |context, url_params|
-      authorized?(context)
+      authenticated?(context)
 
       name, todos, additional_users = parse_request(context)
       list = List.get(url_params["id"])
@@ -72,7 +72,7 @@ class TodoAPI
 
     # Delete the todo list by ID, providing it belongs to the user.
     delete "/list/:id" do |context, url_params|
-      authorized?(context)
+      authenticated?(context)
 
       list = List.get(url_params["id"])
 

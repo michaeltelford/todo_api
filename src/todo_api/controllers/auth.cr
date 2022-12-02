@@ -22,7 +22,7 @@ class TodoAPI
 
     # Get the current user info from the JWT token.
     get "/session" do |context, _|
-      authorized?(context)
+      authenticated?(context)
 
       email, name, picture = get_current_user(context)
 
@@ -41,9 +41,9 @@ class TodoAPI
   end
 end
 
-# Helper method used in any endpoints requiring auth. Sets the authorised
+# Helper method used in any endpoints requiring auth. Sets the authenticated
 # user's name and email if successful. Raises an Exception if not.
-def authorized?(context)
+def authenticated?(context)
   auth = context.request.headers["Authorization"]
   id_token = auth.split("Bearer ").last
   payload = decode_token(context, id_token)
@@ -62,7 +62,7 @@ def has_access?(context, list : List)
   halt(context, HTTP::Status::UNAUTHORIZED)
 end
 
-# Helper method which returns the authorised user's username and email.
+# Helper method which returns the authenticated user's username and email.
 def get_current_user(context) : Tuple(String, String, String?)
   {
     context["current_user_email"].as(String),
