@@ -1,26 +1,35 @@
-.PHONY: help env build run test deploy
+.PHONY: help env build build_prod build_image run test deploy
 
 help:
 	@echo ""
 	@echo "TODO API"
 	@echo "--------"
 	@echo ""
-	@echo "env    : Create an .env file for required variables."
-	@echo "build  : Build a production alpine docker image."
-	@echo "run    : Run the app for development using docker-compose."
-	@echo "test   : Run the tests."
-	@echo "deploy : Deploy to prod."
+	@echo "env    	    : Create an .env file for required variables."
+	@echo "build  	    : Build a local Crystal executable."
+	@echo "build_prod  : Build a production Crystal executable."
+	@echo "build_image : Build a production Docker image."
+	@echo "run    	    : Run the app for local dev using docker-compose."
+	@echo "test   	    : Run the tests."
+	@echo "deploy 	    : Deploy to production."
 	@echo ""
 
 env:
-	echo 'CLIENT_AUTH_URI=\nCLIENT_ID=\nCLIENT_SECRET=\nRSA_PUBLIC_KEY=\nTOKEN_EXCHANGE_URL=' > .env
+	echo 'CLIENT_AUTH_URI=\nCLIENT_ID=\nCLIENT_SECRET=\nTOKEN_EXCHANGE_URL=\nRSA_PUBLIC_KEY=' > .env
 
 build:
 	@-mkdir bin 2>/dev/null || true
+	crystal build ./src/todo_api.cr -o ./bin/todo_api
+
+build_prod:
+	@-mkdir bin 2>/dev/null || true
 	docker run --rm -it -v ${PWD}:/app -w /app \
-	crystallang/crystal:0.35.1-alpine \
+	crystallang/crystal:1.6.2-alpine \
 	crystal build ./src/todo_api.cr -o ./bin/todo_api \
 	--progress --release --static --no-debug
+
+build_image:
+	docker build -f prod.dockerfile -t todo_api_prod .
 
 run:
 	@echo "Run 'guard' to restart the API when src/*.cr files change."
@@ -33,4 +42,4 @@ test:
 	docker rm -f db
 
 deploy:
-	git push heroku master
+	flyctl deploy

@@ -1,0 +1,7 @@
+/docs/
+/bin/
+*.dwarf
+pgdata/
+.DS_Store
+.env
+*.pem
