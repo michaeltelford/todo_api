@@ -42,4 +42,7 @@ test:
 	docker rm -f db
 
 deploy:
-	flyctl deploy
+	@echo "Follow these steps to deploy to production:"
+	@echo "- Push your code to 'master'"
+	@echo "- Login to render.com"
+	@echo "- Manually deploy the latest commit from the dashboard"
