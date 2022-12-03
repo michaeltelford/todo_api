@@ -32,16 +32,17 @@ The following environment variables are required to run the server:
 
 ## Usage
 
-At the root of the repo, you can run the following commands:
+At the root of the repo, running `make` will display help info on all available commands:
 
-```sh
-make env    # Creates a stubbed .env file for you to fill in.
-make build  # Builds the production Docker alpine image.
-make run    # Run the API and DB containers locally (for dev/testing).
-make test   # Run the tests (also using docker-compose).
 ```
-
-Running `make` will display help info on all available commands.
+env    	    : Create an .env file for required variables.
+build  	    : Build a local Crystal executable.
+build_prod  : Build a production Crystal executable.
+build_image : Build a production Docker image.
+run    	    : Run the app for local dev using docker-compose.
+test   	    : Run the tests.
+deploy 	    : Deploy to production.
+```
 
 ## Development
 
@@ -52,10 +53,10 @@ Running `make` will display help info on all available commands.
 
 The API uses an RSA public key to verify the JWT auth token (sent by the client). Follow these steps to find and save the key that the API uses:
 
-- Open https://todo-checklist.auth0.com/pem in a browser
-- Download the PEM certificate to `~/Downloads`
+- Open https://todo-checklist.auth0.com/pem in a browser.
+- Download the PEM certificate to `~/Downloads`.
 - Base64 encode the contents of the downloaded file using an online base64 encoder ensuring there are no `\n`'s anywhere.
-- Set the `RSA_PUBLIC_KEY` ENV var with the encoded value
+- Set the `RSA_PUBLIC_KEY` ENV var with the encoded value.
 - **Note**: If you get a login cycle, check the logs for '`token decode failure: Neither PUB or PRIV key: error: <reason>`' indicating that the `RSA_PUBLIC_KEY` isn't right.
 
 ## Testing
@@ -75,11 +76,11 @@ Until the automated unit tests are up and running you can do the following to ma
 
 ## Contributing
 
-1. Fork it (<https://github.com/your-github-user/todo_api/fork>)
-2. Create your feature branch (`git checkout -b my-new-feature`)
-3. Commit your changes (`git commit -am 'Add some feature'`)
-4. Push to the branch (`git push origin my-new-feature`)
-5. Create a new Pull Request
+1. Fork it (<https://github.com/your-github-user/todo_api/fork>).
+2. Create your feature branch (`git checkout -b my-new-feature`).
+3. Commit your changes (`git commit -am 'Add some feature'`).
+4. Push to the branch (`git push origin my-new-feature`).
+5. Create a new Pull Request.
 
 ## Contributors
 
