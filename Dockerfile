@@ -2,6 +2,7 @@ FROM crystallang/crystal:1.6.2-alpine AS builder
 WORKDIR /app
 RUN mkdir bin
 COPY . .
+RUN shards install
 RUN crystal build ./src/todo_api.cr -o ./bin/todo_api \
 	--progress --release --static --no-debug
 
