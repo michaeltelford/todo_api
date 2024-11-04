@@ -5,13 +5,14 @@ help:
 	@echo "TODO API"
 	@echo "--------"
 	@echo ""
-	@echo "env    	    : Create an .env file for required variables."
-	@echo "build  	    : Build a local Crystal executable."
-	@echo "build_prod  : Build a production Crystal executable."
-	@echo "build_image : Build a production Docker image."
-	@echo "run    	    : Run the app for local dev using docker-compose."
-	@echo "test   	    : Run the tests."
-	@echo "deploy 	    : Deploy to production."
+	@echo "env    	    	 : Create an .env file for required variables."
+	@echo "build  	         : Build a local Crystal executable."
+	@echo "build_prod       : Build a production Crystal executable."
+	@echo "build_image      : Build a development Docker image."
+	@echo "build_prod_image : Build a production Docker image."
+	@echo "run    	    	 : Run the app for local dev using docker-compose."
+	@echo "test   	    	 : Run the tests."
+	@echo "deploy 	    	 : Deploy to production."
 	@echo ""
 
 env:
@@ -29,9 +30,12 @@ build_prod:
 	--progress --release --static --no-debug
 
 build_image:
-	docker build -f prod.dockerfile -t todo_api_prod .
+	docker build -f Dockerfile.dev -t todo_api:dev .
 
-run:
+build_prod_image:
+	docker build -f Dockerfile -t todo_api:latest .
+
+run: build_image
 	@echo "Run 'guard' to restart the API when src/*.cr files change."
 	TODO_ENV=development POSTGRES_DB=app docker-compose up
 
